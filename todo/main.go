@@ -55,7 +55,12 @@ const (
 //						   use it.  See github.com/spf13/cobra for information
 //						   on how to use it.
 //
-//	 YOUR ANSWER: <GOES HERE>
+//	 YOUR ANSWER: Very broadly, this function parses the command line arguments and
+//	 then determines the correct app option. This function first binds all the possible
+//	 flags (db, l, etc.) to the corresponding global variables (dbFileNameFlag, listFlag,
+//	 etc.). It then parses the command line arguments and sets appOpt (app option)
+//	 accordingly using the AppOptType constants. Finally, it returns appOpt and any error
+//	 that occurred.
 func processCmdLineFlags() (AppOptType, error) {
 	flag.StringVar(&dbFileNameFlag, "db", "./data/todo.json", "Name of the database file")
 
@@ -102,6 +107,11 @@ func processCmdLineFlags() (AppOptType, error) {
 		//you want to change.  I recommend you use the -q option to
 		//specify the item id.  Therefore, the -s option is only valid
 		//if the -q option is also set
+
+		//Allison Note: I added all the necessary code for the change status
+		//functionality, however, I did not do other the extra credit portion
+		//which refactors this function to use Cobra
+
 		case "s":
 			//For extra credit you will need to change some things here
 			//and also in main under the CHANGE_ITEM_STATUS case
@@ -202,7 +212,11 @@ func main() {
 		//For the CHANGE_ITEM_STATUS extra credit you will also
 		//need to add some code here
 		fmt.Println("Running CHANGE_ITEM_STATUS...")
-		fmt.Println("Not implemented yet, but it can be for extra credit")
+		err := todo.ChangeItemDoneStatus(queryFlag, itemStatusFlag)
+		if err != nil {
+			fmt.Println("Error: ", err)
+			break
+		}
 		fmt.Println("Ok")
 	default:
 		fmt.Println("INVALID_APP_OPT")
