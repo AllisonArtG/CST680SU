@@ -30,8 +30,9 @@ type DbMap map[int]ToDoItem
 // ANSWER: Due to the fact the fields of the ToDo struct are
 // lowercase, this means that they are not exported. Thus,
 // external programs/code (that are not a part of the current
-// package) cannot access them directly. This protects the ToDo
-// struct from being modified by unauthorized or malicious code.
+// package) cannot access them directly. This protects the DbMap
+// and dbFileName in the ToDo struct from being modified by
+// unauthorized or malicious code.
 type ToDo struct {
 	toDoMap    DbMap
 	dbFileName string
