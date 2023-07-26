@@ -10,12 +10,9 @@ help:
 	@echo "	   run-bin				Run the voter executable"
 	@echo "	   load-db				Add sample data via curl"
 	@echo "	   get-by-id			Get a voter by id pass id=<id> on command line"
-	@echo "	   get-all				Get all todos"
+	@echo "	   get-all				Get all voters"
 	@echo "	   update-2				Update record 2, pass a new title in using title=<title> on command line"
-	@echo "	   delete-all			Delete all todos"
-	@echo "	   delete-by-id			Delete a todo by id pass id=<id> on command line"
-	@echo "	   get-v2				Get all todos by done status pass done=<true|false> on command line"
-	@echo "	   get-v2-all			Get all todos using version 2"
+	@echo "	   delete-by-id			Delete a voter by id pass id=<id> on command line"
 	@echo "	   build-amd64-linux	Build amd64/Linux executable"
 	@echo "	   build-arm64-linux	Build arm64/Linux executable"
 
@@ -69,13 +66,13 @@ get-by-id:
 get-all:
 	curl -w "HTTP Status: %{http_code}\n" -H "Content-Type: application/json" -X GET http://localhost:1080/voters 
 
-.PHONY: delete-all
-delete-all:
-	curl -w "HTTP Status: %{http_code}\n" -H "Content-Type: application/json" -X DELETE http://localhost:1080/todo 
-
 .PHONY: delete-by-id
 delete-by-id:
-	curl -w "HTTP Status: %{http_code}\n" -H "Content-Type: application/json" -X DELETE http://localhost:1080/todo/$(id) 
+	curl -w "HTTP Status: %{http_code}\n" -H "Content-Type: application/json" -X DELETE http://localhost:1080/voters/$(id) 
+
+.PHONY: delete-poll-data
+delete-poll-data:
+	curl -w "HTTP Status: %{http_code}\n" -H "Content-Type: application/json" -X DELETE http://localhost:1080/voters/$(id)/polls/$(pollid) 
 
 .PHONY: get-history-by-id
 get-history-by-id:
@@ -85,14 +82,7 @@ get-history-by-id:
 get-poll-data:
 	curl -w "HTTP Status: %{http_code}\n" -H "Content-Type: application/json" -X GET http://localhost:1080/voters/$(id)/polls/$(pollid)
 
-.PHONY: get-v2
-get-v2:
-	curl -w "HTTP Status: %{http_code}\n" -H "Content-Type: application/json" -X GET http://localhost:1080/v2/todo?done=$(done) 
-
-.PHONY: get-v2-all
-get-v2-all:
-	curl -w "HTTP Status: %{http_code}\n" -H "Content-Type: application/json" -X GET http://localhost:1080/v2/todo
-
 .PHONY: get-health
 get-health:
 	curl -w "HTTP Status: %{http_code}\n" -H "Content-Type: application/json" -X GET http://localhost:1080/voters/health
+

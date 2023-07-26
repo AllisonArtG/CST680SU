@@ -1,48 +1,61 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
 
-	"drexel.edu/voter/db"
+	"drexel.edu/voter-api/voter"
 	"github.com/gin-gonic/gin"
 )
 
-// The api package creates and maintains a reference to the data handler
-// this is a good design practice
 type VoterAPI struct {
-	db *db.VoterList
+	voterList voter.VoterList
 }
 
-func New() (*VoterAPI, error) {
-	dbHandler, err := db.NewVoterList()
-	if err != nil {
-		return nil, err
+func NewVoterApi() *VoterAPI {
+	return &VoterAPI{
+		voterList: voter.VoterList{
+			Voters: make(map[uint]*voter.Voter),
+		},
 	}
-
-	return &VoterAPI{db: dbHandler}, nil
 }
 
-//Below we implement the API functions.  Some of the framework
-//things you will see include:
+// The Professor's Functions
+
+// func (v *VoterAPI) AddVoter(voterID uint, firstName, lastName string) {
+// 	v.voterList.Voters[voterID] = *voter.NewVoter(voterID, firstName, lastName)
+// }
+
+// func (v *VoterAPI) AddPoll(voterID, pollID uint) {
+// 	voter := v.voterList.Voters[voterID]
+// 	voter.AddPoll(pollID)
+// 	v.voterList.Voters[voterID] = voter
+// }
+
+// func (v *VoterAPI) GetVoterJson(voterID uint) string {
+// 	voter := v.voterList.Voters[voterID]
+// 	return voter.ToJson()
+// }
+
+func (v *VoterAPI) GetVoterList() voter.VoterList {
+	return v.voterList
+}
+
+func (v *VoterAPI) GetVoterListJson() string {
+	b, _ := json.Marshal(v.voterList)
+	return string(b)
+}
+
+// THE API FUNCTIONS
 
 // implementation for GET /voters
 // returns all Voters
 func (v *VoterAPI) GetAllVoters(c *gin.Context) {
-
-	voters, err := v.db.GetAllVoters()
-	if err != nil {
-		log.Println("Error Getting All Voters: ", err)
-		c.AbortWithStatus(http.StatusNotFound)
-		return
-	}
-
-	if voters == nil {
-		voters = make([]db.Voter, 0)
-	}
-
+	voters := v.voterList.GetAllVoters()
 	c.JSON(http.StatusOK, voters)
 }
 
@@ -58,39 +71,45 @@ func (v *VoterAPI) GetVoter(c *gin.Context) {
 		return
 	}
 
-	voter, err := v.db.GetVoter(uint(id64))
+	voter, err := v.voterList.GetVoter(uint(id64))
 	if err != nil {
 		log.Println(fmt.Sprintf("Voter with the ID %v not found: ", id64), err)
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
 
-	c.JSON(http.StatusOK, voter)
+	c.JSON(http.StatusOK, *voter)
 }
 
 // implementation for POST /voters/:id
 // adds a new Voter
 func (v *VoterAPI) AddVoter(c *gin.Context) {
-	var voter db.Voter
-
-	if err := c.ShouldBindJSON(&voter); err != nil {
-		log.Println("Error binding JSON: ", err)
+	jsonData, err := ioutil.ReadAll(c.Request.Body)
+	if err != nil {
+		log.Println("Error reading in JSON request body: ", err)
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	if err := v.db.AddVoter(&voter); err != nil {
+	voter, err := v.voterList.UnmarshalVoter(jsonData)
+	if err != nil {
+		log.Println("Error unmarshalling JSON: ", err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	if err := v.voterList.AddVoter(voter); err != nil {
 		log.Println(fmt.Sprintf("Error adding Voter with the ID %v: ", voter.GetVoterID()), err)
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
 
-	c.JSON(http.StatusOK, voter)
+	c.JSON(http.StatusOK, *voter)
 }
 
 // implementation for GET /voters/:id/polls
 // returns the voting history (VoteHistory) for the Voter with ID id
-func (v *VoterAPI) GetVoterHistory(c *gin.Context) {
+func (v *VoterAPI) GetVoteHistory(c *gin.Context) {
 
 	idS := c.Param("id")
 	id64, err := strconv.ParseUint(idS, 10, 32)
@@ -100,14 +119,14 @@ func (v *VoterAPI) GetVoterHistory(c *gin.Context) {
 		return
 	}
 
-	voter, err := v.db.GetVoter(uint(id64))
+	voter, err := v.voterList.GetVoter(uint(id64))
 	if err != nil {
 		log.Println(fmt.Sprintf("Voter with the ID %v not found: ", id64), err)
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
 
-	c.JSON(http.StatusOK, voter.GetVoterHistory())
+	c.JSON(http.StatusOK, voter.GetVoteHistory())
 }
 
 // implementation for GET /voters/:id/polls/:pollid
@@ -122,7 +141,7 @@ func (v *VoterAPI) GetPollData(c *gin.Context) {
 		return
 	}
 
-	voter, err := v.db.GetVoter(uint(id64))
+	voter, err := v.voterList.GetVoter(uint(id64))
 	if err != nil {
 		log.Println(fmt.Sprintf("Voter with the ID %v not found: ", id64), err)
 		c.AbortWithStatus(http.StatusNotFound)
@@ -149,39 +168,121 @@ func (v *VoterAPI) GetPollData(c *gin.Context) {
 
 // implementation for POST /voters/:id/polls/:pollid
 // adds the poll data (voterPoll) for the Voter with ID id and voterPoll pollid
-// func (v *VoterAPI) AddPollData(c *gin.Context) {
+func (v *VoterAPI) AddPollData(c *gin.Context) {
 
-// 	idS := c.Param("id")
-// 	id64, err := strconv.ParseUint(idS, 10, 32)
-// 	if err != nil {
-// 		log.Println(fmt.Sprintf("Error converting Voter ID %v to uint64: ", idS), err)
-// 		c.AbortWithStatus(http.StatusBadRequest)
-// 		return
-// 	}
+	idS := c.Param("id")
+	id64, err := strconv.ParseUint(idS, 10, 32)
+	if err != nil {
+		log.Println(fmt.Sprintf("Error converting Voter ID %v to uint64: ", idS), err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
 
-// 	voter, err := v.db.GetVoter(uint(id64))
-// 	if err != nil {
-// 		log.Println(fmt.Sprintf("Voter with the ID %v not found: ", id64), err)
-// 		c.AbortWithStatus(http.StatusNotFound)
-// 		return
-// 	}
+	voter, err := v.voterList.GetVoter(uint(id64))
+	if err != nil {
+		log.Println(fmt.Sprintf("Voter with the ID %v not found: ", id64), err)
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	}
 
-// 	var poll db.voterPoll
+	jsonData, err := ioutil.ReadAll(c.Request.Body)
+	if err != nil {
+		log.Println("Error reading in JSON request body: ", err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
 
-// 	if err := c.ShouldBindJSON(&poll); err != nil {
-// 		log.Println("Error binding JSON: ", err)
-// 		c.AbortWithStatus(http.StatusBadRequest)
-// 		return
-// 	}
+	poll, err := v.voterList.UnmarshalVoterPoll(jsonData)
 
-// 	if err := voter.AddVoterPoll(&poll); err != nil {
-// 		log.Println(fmt.Sprintf("Error adding poll with the ID %v: ", poll.GetPollID), err)
-// 		c.AbortWithStatus(http.StatusInternalServerError)
-// 		return
-// 	}
+	if err := voter.AddVoterPoll(poll); err != nil {
+		log.Println(fmt.Sprintf("Error adding poll with the ID %v: ", poll.GetPollID), err)
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
 
-// 	c.JSON(http.StatusOK, poll)
-// }
+	c.JSON(http.StatusOK, poll)
+}
+
+// implementation of GET /voters/health
+func (v *VoterAPI) HealthCheck(c *gin.Context) {
+	c.JSON(http.StatusOK,
+		gin.H{
+			"status":             "ok",
+			"version":            "1.0.0",
+			"uptime":             100,
+			"users_processed":    1000,
+			"errors_encountered": 10,
+		})
+}
+
+// implementation for DELETE /voters/:id
+// deletes a Voter
+func (v *VoterAPI) DeleteVoter(c *gin.Context) {
+	idS := c.Param("id")
+	id64, err := strconv.ParseUint(idS, 10, 32)
+	if err != nil {
+		log.Println(fmt.Sprintf("Error converting Voter ID %v to uint64: ", idS), err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	if err := v.voterList.DeleteVoter(uint(id64)); err != nil {
+		log.Println(fmt.Sprintf("Error deleting Voter with ID %v: ", id64), err)
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.Status(http.StatusOK)
+}
+
+// implementation for DELETE /voters/:id/polls/:pollid
+// deletes the data (voterPoll) for the Voter with ID id and voterPoll pollid
+func (v *VoterAPI) DeletePollData(c *gin.Context) {
+
+	idS := c.Param("id")
+	id64, err := strconv.ParseUint(idS, 10, 32)
+	if err != nil {
+		log.Println(fmt.Sprintf("Error converting Voter ID %v to uint64: ", idS), err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	voter, err := v.voterList.GetVoter(uint(id64))
+	if err != nil {
+		log.Println(fmt.Sprintf("Voter with the ID %v not found: ", id64), err)
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+
+	pollidS := c.Param("pollid")
+	pollid64, err := strconv.ParseUint(pollidS, 10, 32)
+	if err != nil {
+		log.Println(fmt.Sprintf("Error converting poll ID %v to uint64: ", pollidS), err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	err = voter.DeleteVoterPoll(uint(pollid64))
+	if err != nil {
+		log.Println(fmt.Sprintf("Error finding poll with ID %v in Voter %v's history: ", pollid64, id64), err)
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+
+	c.Status(http.StatusOK)
+}
+
+func (v *VoterAPI) UpdateVoter(c *gin.Context) {
+	// TODO
+	c.Status(http.StatusOK)
+
+}
+
+func (v *VoterAPI) UpdatePollData(c *gin.Context) {
+	// TODO
+	c.Status(http.StatusOK)
+
+}
 
 // implementation for GET /v2/todo
 // returns todos that are either done or not done
@@ -263,21 +364,6 @@ func (v *VoterAPI) GetPollData(c *gin.Context) {
 // 	c.JSON(http.StatusOK, todoItem)
 // }
 
-// implementation for DELETE /todo/:id
-// deletes a todo
-// func (td *VoterAPI) DeleteToDo(c *gin.Context) {
-// 	idS := c.Param("id")
-// 	id64, _ := strconv.ParseInt(idS, 10, 32)
-
-// 	if err := td.db.DeleteItem(int(id64)); err != nil {
-// 		log.Println("Error deleting item: ", err)
-// 		c.AbortWithStatus(http.StatusInternalServerError)
-// 		return
-// 	}
-
-// 	c.Status(http.StatusOK)
-// }
-
 // implementation for DELETE /todo
 // deletes all todos
 // func (td *VoterAPI) DeleteAllToDo(c *gin.Context) {
@@ -299,19 +385,4 @@ func (v *VoterAPI) GetPollData(c *gin.Context) {
 func (v *VoterAPI) CrashSim(c *gin.Context) {
 	//panic() is go's version of throwing an exception
 	panic("Simulating an unexpected crash")
-}
-
-// implementation of GET /health. It is a good practice to build in a
-// health check for your API.  Below the results are just hard coded
-// but in a real API you can provide detailed information about the
-// health of your API with a Health Check
-func (v *VoterAPI) HealthCheck(c *gin.Context) {
-	c.JSON(http.StatusOK,
-		gin.H{
-			"status":             "ok",
-			"version":            "1.0.0",
-			"uptime":             100,
-			"users_processed":    1000,
-			"errors_encountered": 10,
-		})
 }
