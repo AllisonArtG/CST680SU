@@ -10,19 +10,19 @@ import (
 //STRUCTS
 
 type voterPoll struct {
-	PollID   uint      `json:"poll_id"`
+	PollID   uint      `json:"pollid"`
 	VoteDate time.Time `json:"vote_date"`
 }
 
 type Voter struct {
-	VoterID     uint        `json:"id" binding:"required"`
-	FirstName   string      `json:"first_name" binding:"required"`
-	LastName    string      `json:"last_name" binding:"required"`
+	VoterID     uint        `json:"id"`
+	FirstName   string      `json:"first_name"`
+	LastName    string      `json:"last_name"`
 	VoteHistory []voterPoll `json:"vote_history"`
 }
 
 type VoterList struct {
-	Voters map[uint]*Voter //A map of VoterIDs as keys and Voter structs as values
+	Voters map[uint]Voter //A map of VoterIDs as keys and Voter structs as values
 }
 
 func NewVoter(voterID uint, first string, last string) (*Voter, error) {
@@ -37,7 +37,10 @@ func (*VoterList) UnmarshalVoter(jsonData []byte) (*Voter, error) {
 	var voter Voter
 	err := json.Unmarshal(jsonData, &voter)
 	if err != nil {
-		return &Voter{}, nil
+		return &Voter{}, err
+	}
+	if len(voter.FirstName) == 0 || len(voter.LastName) == 0 {
+		return &Voter{}, errors.New(("Required Voter field(s) were not provided"))
 	}
 	if voter.VoteHistory == nil {
 		voter.VoteHistory = make([]voterPoll, 0)
@@ -50,7 +53,7 @@ func (*VoterList) UnmarshalVoterPoll(jsonData []byte) (*voterPoll, error) {
 	var poll voterPoll
 	err := json.Unmarshal(jsonData, &poll)
 	if err != nil {
-		return &voterPoll{}, nil
+		return &voterPoll{}, err
 	}
 	return &poll, nil
 }
@@ -80,18 +83,18 @@ func (vl *VoterList) GetAllVoters() []Voter {
 	var voters []Voter
 
 	for _, voter := range vl.Voters {
-		voters = append(voters, *voter)
+		voters = append(voters, voter)
 	}
 
 	return voters
 }
 
 // returns the Voter with the ID voterID.
-func (vl *VoterList) GetVoter(voterID uint) (*Voter, error) {
+func (vl *VoterList) GetVoter(voterID uint) (Voter, error) {
 
 	voter, ok := vl.Voters[voterID]
 	if !ok {
-		return &Voter{}, errors.New(fmt.Sprintf("Voter with ID %v does not exist.", voterID))
+		return Voter{}, errors.New(fmt.Sprintf("Voter with ID %v does not exist.", voterID))
 	}
 
 	return voter, nil
@@ -117,29 +120,33 @@ func (vl *VoterList) AddVoter(voter *Voter) error {
 			}
 		}
 	}
-	vl.Voters[voter.VoterID] = voter
+	vl.Voters[voter.VoterID] = *voter
 
 	return nil
 }
 
 // returns the Voter's voterPoll where the PollID matches pollID
-func (v *Voter) GetVoterPoll(pollID uint) (voterPoll, error) {
-	voteHistory := v.VoteHistory
-	if len(voteHistory) == 0 {
-		return voterPoll{}, errors.New(fmt.Sprintf("Poll with ID %v not found in voter %v's history.", v.VoterID, pollID))
+func (vl *VoterList) GetVoterPoll(id, pollid uint) (voterPoll, error) {
+	voter, ok := vl.Voters[id]
+	if !ok {
+		return voterPoll{}, errors.New(fmt.Sprintf("Voter with ID %v does not exist.", id))
+	}
+
+	if len(voter.VoteHistory) == 0 {
+		return voterPoll{}, errors.New(fmt.Sprintf("Poll with ID %v not found in voter %v's history.", id, pollid))
 	}
 
 	relevantPolls := make([]voterPoll, 0)
-	for i := 0; i < len(voteHistory); i++ {
-		poll := voteHistory[i]
-		if poll.PollID == pollID {
+	for i := 0; i < len(voter.VoteHistory); i++ {
+		poll := voter.VoteHistory[i]
+		if poll.PollID == pollid {
 			relevantPolls = append(relevantPolls, poll)
 		}
 	}
 	if len(relevantPolls) == 0 {
-		return voterPoll{}, errors.New(fmt.Sprintf("Poll with ID %v not found in voter %v's history.", v.VoterID, pollID))
+		return voterPoll{}, errors.New(fmt.Sprintf("Poll with ID %v not found in voter %v's history.", id, pollid))
 	} else if len(relevantPolls) > 1 {
-		return voterPoll{}, errors.New(fmt.Sprintf("There is an error with the internal state. Voter %v was allowed to vote more than once in poll %v.", v.VoterID, pollID))
+		return voterPoll{}, errors.New(fmt.Sprintf("There is an error with the internal state. Voter %v was allowed to vote more than once in poll %v.", id, pollid))
 	} else {
 		return relevantPolls[0], nil
 	}
@@ -147,17 +154,22 @@ func (v *Voter) GetVoterPoll(pollID uint) (voterPoll, error) {
 }
 
 // AddVoterPoll accepts a *voterPoll and adds it to the Voter's VoteHistory
-func (v *Voter) AddVoterPoll(poll *voterPoll) error {
+func (vl *VoterList) AddVoterPoll(id uint, poll *voterPoll) error {
+	voter, ok := vl.Voters[id]
+	if !ok {
+		return errors.New(fmt.Sprintf("Voter with ID %v does not exist.", id))
+	}
 
-	if len(v.VoteHistory) != 0 {
-		for i := 0; i < len(v.VoteHistory); i++ {
-			currPoll := v.VoteHistory[i]
+	if len(voter.VoteHistory) != 0 {
+		for i := 0; i < len(voter.VoteHistory); i++ {
+			currPoll := voter.VoteHistory[i]
 			if currPoll.PollID == poll.PollID {
-				return errors.New(fmt.Sprintf("Poll with ID %v already exists in Voter %v's VoteHistory. Voters are only allowed to vote once per poll.", poll.PollID, v.VoterID))
+				return errors.New(fmt.Sprintf("Poll with ID %v already exists in Voter %v's VoteHistory. Voters are only allowed to vote once per poll.", poll.PollID, id))
 			}
 		}
 	}
-	v.VoteHistory = append(v.VoteHistory, *poll)
+	voter.VoteHistory = append(voter.VoteHistory, *poll)
+	vl.Voters[id] = voter
 	return nil
 }
 
@@ -174,20 +186,26 @@ func (vl *VoterList) DeleteVoter(voterID uint) error {
 	}
 }
 
-func (v *Voter) DeleteVoterPoll(pollID uint) error {
+func (vl *VoterList) DeleteVoterPoll(id, pollid uint) error {
+
+	voter, ok := vl.Voters[id]
+	if !ok {
+		return errors.New(fmt.Sprintf("Voter with ID %v does not exist.", id))
+	}
 
 	i := -1
-	for index, poll := range v.VoteHistory {
-		if poll.PollID == pollID {
+	for index, poll := range voter.VoteHistory {
+		if poll.PollID == pollid {
 			i = index
 			break
 		}
 	}
 
 	if i == -1 {
-		return errors.New(fmt.Sprintf("Poll with ID %v does not exist in Voter %v's VoteHistory", v.VoterID, pollID))
+		return errors.New(fmt.Sprintf("Poll with ID %v does not exist in Voter %v's VoteHistory", voter.VoterID, pollid))
 	} else {
-		v.VoteHistory = append(v.VoteHistory[:i], v.VoteHistory[i+1:]...)
+		voter.VoteHistory = append(voter.VoteHistory[:i], voter.VoteHistory[i+1:]...)
+		vl.Voters[id] = voter
 		return nil
 	}
 }

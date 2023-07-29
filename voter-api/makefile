@@ -39,7 +39,7 @@ run:
 
 .PHONY: run-bin
 run-bin:
-	./voter
+	./voter-api
 
 .PHONY: restore-db
 restore-db:
@@ -51,7 +51,7 @@ restore-db-windows:
 
 .PHONY: load-db
 load-db:
-	curl -d '{ "id": 1, "first_name": "John", "last_name": "Doe", "vote_history": [{"poll_id": 1, "vote_date": "2020-11-30T14:20:28.000Z"}]}' -H "Content-Type: application/json" -X POST http://localhost:1080/voters/1
+	curl -d '{ "id": 1, "first_name": "John", "last_name": "Doe", "vote_history": [{"pollid": 1, "vote_date": "2020-11-30T14:20:28.000Z"}]}' -H "Content-Type: application/json" -X POST http://localhost:1080/voters/1
 	curl -d '{ "id": 2, "first_name": "Jane", "last_name": "Lain"}' -H "Content-Type: application/json" -X POST http://localhost:1080/voters/2
 
 .PHONY: update-2
@@ -85,4 +85,8 @@ get-poll-data:
 .PHONY: get-health
 get-health:
 	curl -w "HTTP Status: %{http_code}\n" -H "Content-Type: application/json" -X GET http://localhost:1080/voters/health
+
+.PHONY: add-voter-3
+add-voter:
+	curl -d '{ "id": 3, "first_name": "James", "last_name": "Liu"}' -H "Content-Type: application/json" -X POST http://localhost:1080/voters/3
 

@@ -19,7 +19,7 @@ type VoterAPI struct {
 func NewVoterApi() *VoterAPI {
 	return &VoterAPI{
 		voterList: voter.VoterList{
-			Voters: make(map[uint]*voter.Voter),
+			Voters: make(map[uint]voter.Voter),
 		},
 	}
 }
@@ -78,7 +78,7 @@ func (v *VoterAPI) GetVoter(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, *voter)
+	c.JSON(http.StatusOK, voter)
 }
 
 // implementation for POST /voters/:id
@@ -141,13 +141,6 @@ func (v *VoterAPI) GetPollData(c *gin.Context) {
 		return
 	}
 
-	voter, err := v.voterList.GetVoter(uint(id64))
-	if err != nil {
-		log.Println(fmt.Sprintf("Voter with the ID %v not found: ", id64), err)
-		c.AbortWithStatus(http.StatusNotFound)
-		return
-	}
-
 	pollidS := c.Param("pollid")
 	pollid64, err := strconv.ParseUint(pollidS, 10, 32)
 	if err != nil {
@@ -156,7 +149,7 @@ func (v *VoterAPI) GetPollData(c *gin.Context) {
 		return
 	}
 
-	poll, err := voter.GetVoterPoll(uint(pollid64))
+	poll, err := v.voterList.GetVoterPoll(uint(id64), uint(pollid64))
 	if err != nil {
 		log.Println(fmt.Sprintf("Error finding poll with ID %v in Voter %v's history: ", pollid64, id64), err)
 		c.AbortWithStatus(http.StatusNotFound)
@@ -178,13 +171,6 @@ func (v *VoterAPI) AddPollData(c *gin.Context) {
 		return
 	}
 
-	voter, err := v.voterList.GetVoter(uint(id64))
-	if err != nil {
-		log.Println(fmt.Sprintf("Voter with the ID %v not found: ", id64), err)
-		c.AbortWithStatus(http.StatusNotFound)
-		return
-	}
-
 	jsonData, err := ioutil.ReadAll(c.Request.Body)
 	if err != nil {
 		log.Println("Error reading in JSON request body: ", err)
@@ -193,18 +179,23 @@ func (v *VoterAPI) AddPollData(c *gin.Context) {
 	}
 
 	poll, err := v.voterList.UnmarshalVoterPoll(jsonData)
+	if err != nil {
+		log.Println("Error unmarshalling JSON: ", err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
 
-	if err := voter.AddVoterPoll(poll); err != nil {
+	if err := v.voterList.AddVoterPoll(uint(id64), poll); err != nil {
 		log.Println(fmt.Sprintf("Error adding poll with the ID %v: ", poll.GetPollID), err)
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
 
-	c.JSON(http.StatusOK, poll)
+	c.Status(http.StatusOK)
 }
 
 // implementation of GET /voters/health
-func (v *VoterAPI) HealthCheck(c *gin.Context) {
+func (v *VoterAPI) GetHealth(c *gin.Context) {
 	c.JSON(http.StatusOK,
 		gin.H{
 			"status":             "ok",
@@ -247,13 +238,6 @@ func (v *VoterAPI) DeletePollData(c *gin.Context) {
 		return
 	}
 
-	voter, err := v.voterList.GetVoter(uint(id64))
-	if err != nil {
-		log.Println(fmt.Sprintf("Voter with the ID %v not found: ", id64), err)
-		c.AbortWithStatus(http.StatusNotFound)
-		return
-	}
-
 	pollidS := c.Param("pollid")
 	pollid64, err := strconv.ParseUint(pollidS, 10, 32)
 	if err != nil {
@@ -262,9 +246,9 @@ func (v *VoterAPI) DeletePollData(c *gin.Context) {
 		return
 	}
 
-	err = voter.DeleteVoterPoll(uint(pollid64))
+	err = v.voterList.DeleteVoterPoll(uint(id64), uint(pollid64))
 	if err != nil {
-		log.Println(fmt.Sprintf("Error finding poll with ID %v in Voter %v's history: ", pollid64, id64), err)
+		log.Println(fmt.Sprintf("Error deleting %v from Voter %v's history: ", pollid64, id64), err)
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
@@ -283,67 +267,6 @@ func (v *VoterAPI) UpdatePollData(c *gin.Context) {
 	c.Status(http.StatusOK)
 
 }
-
-// implementation for GET /v2/todo
-// returns todos that are either done or not done
-// depending on the value of the done query parameter
-// for example, /v2/todo?done=true will return all
-// todos that are done.  Note you can have multiple
-// query parameters, for example /v2/todo?done=true&foo=bar
-// func (td *VoterAPI) ListSelectTodos(c *gin.Context) {
-// 	//lets first load the data
-// 	todoList, err := td.db.GetAllItems()
-// 	if err != nil {
-// 		log.Println("Error Getting Database Items: ", err)
-// 		c.AbortWithStatus(http.StatusNotFound)
-// 		return
-// 	}
-// 	//If the database is empty, make an empty slice so that the
-// 	//JSON marshalling works correctly
-// 	if todoList == nil {
-// 		todoList = make([]db.ToDoItem, 0)
-// 	}
-
-// 	//Note that the query parameter is a string, so we
-// 	//need to convert it to a bool
-// 	doneS := c.Query("done")
-
-// 	//if the doneS is empty, then we will return all items
-// 	if doneS == "" {
-// 		c.JSON(http.StatusOK, todoList)
-// 		return
-// 	}
-
-// 	//Now we can handle the case where doneS is not empty
-// 	//and we need to filter the list based on the doneS value
-
-// 	done, err := strconv.ParseBool(doneS)
-// 	if err != nil {
-// 		log.Println("Error converting done to bool: ", err)
-// 		c.AbortWithStatus(http.StatusBadRequest)
-// 		return
-// 	}
-
-// 	//Now we need to filter the list based on the done value
-// 	//that was passed in.  We will create a new slice and
-// 	//only add items that match the done value
-// 	var filteredList []db.ToDoItem
-// 	for _, item := range todoList {
-// 		if item.IsDone == done {
-// 			filteredList = append(filteredList, item)
-// 		}
-// 	}
-
-// 	//Note that the database returns a nil slice if there are no items
-// 	//in the database.  We need to convert this to an empty slice
-// 	//so that the JSON marshalling works correctly.  We want to return
-// 	//an empty slice, not a nil slice. This will result in the json being []
-// 	if filteredList == nil {
-// 		filteredList = make([]db.ToDoItem, 0)
-// 	}
-
-// 	c.JSON(http.StatusOK, filteredList)
-// }
 
 // implementation for PUT /todo
 // Web api standards use PUT for Updates
