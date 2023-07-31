@@ -3,7 +3,6 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
@@ -81,30 +80,24 @@ func (v *VoterAPI) GetVoter(c *gin.Context) {
 	c.JSON(http.StatusOK, voter)
 }
 
-// implementation for POST /voters/:id
+// implementation for POST /voters
 // adds a new Voter
 func (v *VoterAPI) AddVoter(c *gin.Context) {
-	jsonData, err := ioutil.ReadAll(c.Request.Body)
-	if err != nil {
-		log.Println("Error reading in JSON request body: ", err)
-		c.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
 
-	voter, err := v.voterList.UnmarshalVoter(jsonData)
-	if err != nil {
-		log.Println("Error unmarshalling JSON: ", err)
+	var voter voter.Voter
+	if err := c.ShouldBindJSON(&voter); err != nil {
+		log.Println("Error binding JSON: ", err)
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
 	if err := v.voterList.AddVoter(voter); err != nil {
-		log.Println(fmt.Sprintf("Error adding Voter with the ID %v: ", voter.GetVoterID()), err)
+		log.Println(fmt.Sprintf("Error adding Voter with the ID %v: ", voter.VoterID), err)
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
 
-	c.JSON(http.StatusOK, *voter)
+	c.Status(http.StatusOK)
 }
 
 // implementation for GET /voters/:id/polls
@@ -126,7 +119,7 @@ func (v *VoterAPI) GetVoteHistory(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, voter.GetVoteHistory())
+	c.JSON(http.StatusOK, voter.VoteHistory)
 }
 
 // implementation for GET /voters/:id/polls/:pollid
@@ -136,7 +129,7 @@ func (v *VoterAPI) GetPollData(c *gin.Context) {
 	idS := c.Param("id")
 	id64, err := strconv.ParseUint(idS, 10, 32)
 	if err != nil {
-		log.Println(fmt.Sprintf("Error converting Voter ID %v to uint64: ", idS), err)
+		log.Println(fmt.Sprintf("Error converting VoterID %v to uint64: ", idS), err)
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
@@ -144,14 +137,14 @@ func (v *VoterAPI) GetPollData(c *gin.Context) {
 	pollidS := c.Param("pollid")
 	pollid64, err := strconv.ParseUint(pollidS, 10, 32)
 	if err != nil {
-		log.Println(fmt.Sprintf("Error converting poll ID %v to uint64: ", pollidS), err)
+		log.Println(fmt.Sprintf("Error converting PollID %v to uint64: ", pollidS), err)
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
 	poll, err := v.voterList.GetVoterPoll(uint(id64), uint(pollid64))
 	if err != nil {
-		log.Println(fmt.Sprintf("Error finding poll with ID %v in Voter %v's history: ", pollid64, id64), err)
+		log.Println(fmt.Sprintf("Error finding PollID %v in Voter %v's VoteHistory: ", pollid64, id64), err)
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
@@ -159,7 +152,7 @@ func (v *VoterAPI) GetPollData(c *gin.Context) {
 	c.JSON(http.StatusOK, poll)
 }
 
-// implementation for POST /voters/:id/polls/:pollid
+// implementation for POST /voters/:id/polls
 // adds the poll data (voterPoll) for the Voter with ID id and voterPoll pollid
 func (v *VoterAPI) AddPollData(c *gin.Context) {
 
@@ -171,22 +164,15 @@ func (v *VoterAPI) AddPollData(c *gin.Context) {
 		return
 	}
 
-	jsonData, err := ioutil.ReadAll(c.Request.Body)
-	if err != nil {
-		log.Println("Error reading in JSON request body: ", err)
+	var voter voter.Voter
+	if err := c.ShouldBindJSON(&voter); err != nil {
+		log.Println("Error binding JSON: ", err)
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	poll, err := v.voterList.UnmarshalVoterPoll(jsonData)
-	if err != nil {
-		log.Println("Error unmarshalling JSON: ", err)
-		c.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
-
-	if err := v.voterList.AddVoterPoll(uint(id64), poll); err != nil {
-		log.Println(fmt.Sprintf("Error adding poll with the ID %v: ", poll.GetPollID), err)
+	if err := v.voterList.AddVoterPoll(uint(id64), voter); err != nil {
+		log.Println("Error adding poll: ", err)
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
@@ -256,49 +242,52 @@ func (v *VoterAPI) DeletePollData(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
+// implementation for PUT /voters/:id
 func (v *VoterAPI) UpdateVoter(c *gin.Context) {
-	// TODO
+
+	var voter voter.Voter
+	if err := c.ShouldBindJSON(&voter); err != nil {
+		log.Println("Error binding JSON: ", err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	if err := v.voterList.UpdateVoter(voter); err != nil {
+		log.Println(fmt.Sprintf("Error updating Voter %v: ", voter.VoterID), err)
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
 	c.Status(http.StatusOK)
 
 }
 
+// implementation for PUT /voters/:id/polls
 func (v *VoterAPI) UpdatePollData(c *gin.Context) {
-	// TODO
+	idS := c.Param("id")
+	id64, err := strconv.ParseUint(idS, 10, 32)
+	if err != nil {
+		log.Println(fmt.Sprintf("Error converting Voter ID %v to uint64: ", idS), err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	var voter voter.Voter
+	if err := c.ShouldBindJSON(&voter); err != nil {
+		log.Println("Error binding JSON: ", err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	if err := v.voterList.UpdatePollData(uint(id64), voter); err != nil {
+		log.Println(fmt.Sprintf("Error updating poll in Voter %v's history: ", id64), err)
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
 	c.Status(http.StatusOK)
 
 }
-
-// implementation for PUT /todo
-// Web api standards use PUT for Updates
-// func (td *VoterAPI) UpdateToDo(c *gin.Context) {
-// 	var todoItem db.ToDoItem
-// 	if err := c.ShouldBindJSON(&todoItem); err != nil {
-// 		log.Println("Error binding JSON: ", err)
-// 		c.AbortWithStatus(http.StatusBadRequest)
-// 		return
-// 	}
-
-// 	if err := td.db.UpdateItem(todoItem); err != nil {
-// 		log.Println("Error updating item: ", err)
-// 		c.AbortWithStatus(http.StatusInternalServerError)
-// 		return
-// 	}
-
-// 	c.JSON(http.StatusOK, todoItem)
-// }
-
-// implementation for DELETE /todo
-// deletes all todos
-// func (td *VoterAPI) DeleteAllToDo(c *gin.Context) {
-
-// 	if err := td.db.DeleteAll(); err != nil {
-// 		log.Println("Error deleting all items: ", err)
-// 		c.AbortWithStatus(http.StatusInternalServerError)
-// 		return
-// 	}
-
-// 	c.Status(http.StatusOK)
-// }
 
 /*   SPECIAL HANDLERS FOR DEMONSTRATION - CRASH SIMULATION AND HEALTH CHECK */
 

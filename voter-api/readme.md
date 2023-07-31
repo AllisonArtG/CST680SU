@@ -1,38 +1,47 @@
 ## Voter API
 
-This is a demo application showing many aspects of how to use the Golang Gin
-framework to create an API.
+This application uses the Golang Gin framework to create a Voter API.
 
-It keeps `todo` items in memory for this demo.  The makefile allows you to 
-exercise the API.  For example you can load the database, query by item,
-and so on.
+It keeps `Voter`s which are representations of a voter. Each `Voter` has the following fields: 
+`VoterID`, `FirstName`, `LastName`, `VoteHistory`. `VoteHistory` stores the poll data for different
+polls the `Voter` has voted in.
 
-To see everything you can do you can just run `make` and get help.  See below.  Also notice that some of the make targets take parameters.  To do this you add a key=value on the `make` command line.  For example, to get a `todo` with an id of `2`. you run `make id=2 get-by-id`
+To see everything you can do you can just run `make` and some of the make targets take parameters.  
 
 ```
 ➜  todo-api git:(main) make
 Usage make <TARGET>
 
   Targets:
-           build                        Build the voter executable
-           run                          Run the voter program from code
-           run-bin                      Run the todo executable
-           load-db                      Add sample data via curl
-           get-by-id                    Get a todo by id pass id=<id> on command line
-           get-all                      Get all todos
-           update-2                     Update record 2, pass a new title in using title=<title> on command line
-           delete-all                   Delete all todos
-           delete-by-id                 Delete a todo by id pass id=<id> on command line
-           get-v2                       Get all todos by done status pass done=<true|false> on command line
-           get-v2-all                   Get all todos using version 2
+
+          build				                  Build the voter executable
+          build-amd64-linux	            Build amd64/Linux executable
+          build-arm64-linux	            Build arm64/Linux executable
+          run                           Run the voter program from code
+          run-bin				                Run the voter executable
+          load-db				                Add sample data via curl
+          get-all-voters		            Get all voters
+          get-voter-by-id		            Get a voter by id pass id=<id> on command line
+          add-voter                     Add a voter pass voter=<voter> on command line"
+                                        e.g. voter='{"VoterID": 3, "FirstName": "James", "LastName": "Liu"}'
+                                        Ignores any data in VoteHistory and simply initializes an empty slice
+          get-history-by-id             Get a voter's voting history by id pass id=<id> on command line
+          get-poll-data		              Get a voter's poll data pass id=<id> pollid=<pollid> on command line
+          add-poll-data		              Add poll data to a voter's history pass id=<id> voter=<voter> on    
+                                        command line
+                                        e.g. id=3 voter='{[{"PollID": 4, "VoteDate": "2022-11-30T14:20:28.000Z"}'
+                                        Any other voter fields will be ignored (VoterID, FirstName, LastName)
+                                        Only one poll data item is allowed to be added at a time
+          delete-voter-by-id	          Delete a voter by id pass id=<id> on command line
+          delete-poll-data		          Delete a voter's poll data pass id=<id> pollid=<pollid> on command  
+                                        line
+          update-voter			            Update a voter pass voter=<voter> on command line"
+                                        e.g. voter='{"VoterID": 3, "FirstName": "Jimmy", "LastName": "Liu"}'
+                                        This only updates FirstName and Lastname, so anything in VoteHistory will be ignored
+          update-poll-data              Update a voter's poll data pass id=<id> voter=<voter> on command  
+                                        line
+                                        e.g. id=3 voter='{[{"PollID": 4, "VoteDate": "2022-12-10T14:20:28.000Z"})'
+                                        This only updates VoteDate of a poll, so any of the other in Voter fields outside of
+                                        VoteHistory will be ignored
+
 ```
-
-### Why use the gin framework?
-
-Many people in the golang community are opposed to using frameworks because the standard library provides robust function out-of-the-box.  However, the golang gin framework reduces a lot of the code you need to write and has a lot of nice features out of the box.  As far as I know its still the most popular and widely used API framework for go.
-
-Online documentation for gin can be found here:
-
-1. GitHub page: https://github.com/gin-gonic/gin
-2. Go Docs: https://pkg.go.dev/github.com/gin-gonic/gin?utm_source=godoc
-3. Gin homepage: https://gin-gonic.com/

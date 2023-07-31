@@ -47,12 +47,12 @@ func main() {
 	r.GET("/voters", apiHandler.GetAllVoters)
 
 	r.GET("/voters/:id", apiHandler.GetVoter)
-	r.POST("/voters/:id", apiHandler.AddVoter)
+	r.POST("/voters", apiHandler.AddVoter)
 
 	r.GET("/voters/:id/polls", apiHandler.GetVoteHistory)
 
 	r.GET("/voters/:id/polls/:pollid", apiHandler.GetPollData)
-	r.POST("/voters/:id/polls/:pollid", apiHandler.AddPollData)
+	r.POST("/voters/:id/polls", apiHandler.AddPollData)
 
 	r.GET("/voters/health", apiHandler.GetHealth)
 
@@ -61,8 +61,8 @@ func main() {
 	r.DELETE("/voters/:id", apiHandler.DeleteVoter)
 	r.DELETE("/voters/:id/polls/:pollid", apiHandler.DeletePollData)
 
-	r.PUT("/voters/:id", apiHandler.UpdateVoter)
-	r.PUT("/voters/:id/polls/:pollid", apiHandler.UpdatePollData)
+	r.PUT("/voters", apiHandler.UpdateVoter)
+	r.PUT("/voters/:id/polls", apiHandler.UpdatePollData)
 
 	// LEFTOVERS (from todo-api)
 
