@@ -31,6 +31,7 @@ help:
 	@echo "						e.g. id=3 voter='{[{\"PollID\": 4, \"VoteDate\": "2022-12-10T14:20:28.000Z"})'"
 	@echo "						This only updates VoteDate of a poll, so any of the other in Voter fields outside of"
 	@echo "						VoteHistory will be ignored"
+	@echo "	   get-health				Get health of the Voter-API Application"
 
 
 
