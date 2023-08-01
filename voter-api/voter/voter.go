@@ -42,7 +42,7 @@ func (vl *VoterList) GetAllVoters() []Voter {
 	return voters
 }
 
-// returns the Voter with the ID voterID.
+// returns the Voter with the VoterID voterID
 func (vl *VoterList) GetVoter(voterID uint) (Voter, error) {
 
 	voter, ok := vl.Voters[voterID]
@@ -54,7 +54,7 @@ func (vl *VoterList) GetVoter(voterID uint) (Voter, error) {
 }
 
 // AddVoter accepts a Voter and adds it to Voters.
-// VoteHistory is always initialized to an empty slice
+// its VoteHistory is always initialized to an empty slice
 func (vl *VoterList) AddVoter(voter Voter) error {
 
 	_, ok := vl.Voters[voter.VoterID]
@@ -66,18 +66,6 @@ func (vl *VoterList) AddVoter(voter Voter) error {
 		voter.VoteHistory = make([]voterPoll, 0)
 	}
 
-	// if len(voter.VoteHistory) > 1 {
-	// 	voteIDs := make(map[uint]int)
-	// 	for i := 0; i < len(voter.VoteHistory); i++ {
-	// 		poll := voter.VoteHistory[i]
-	// 		_, ok := voteIDs[poll.PollID]
-	// 		if ok {
-	// 			return errors.New(fmt.Sprintf("The voter %v provided has multiple votes per the poll %v", voter.VoterID, poll.PollID))
-	// 		} else {
-	// 			voteIDs[poll.PollID] = 1
-	// 		}
-	// 	}
-	// }
 	vl.Voters[voter.VoterID] = voter
 	return nil
 }
@@ -138,7 +126,7 @@ func (vl *VoterList) AddVoterPoll(voterID uint, newVoter Voter) error {
 
 // EXTRA CREDIT
 
-// deletes the Voter with the VoterID voterID from Voters.
+// deletes the Voter with the VoterID voterID from Voters
 func (vl *VoterList) DeleteVoter(voterID uint) error {
 
 	if _, ok := vl.Voters[voterID]; ok {
@@ -174,6 +162,7 @@ func (vl *VoterList) DeleteVoterPoll(voterID, pollID uint) error {
 	}
 }
 
+// updates an existing Voter with the newVoter's fields (FirstName and LastName)
 func (vl *VoterList) UpdateVoter(newVoter Voter) error {
 
 	if _, ok := vl.Voters[newVoter.VoterID]; !ok {
@@ -191,6 +180,7 @@ func (vl *VoterList) UpdateVoter(newVoter Voter) error {
 	return nil
 }
 
+// updates an existing voterPoll in Voter voterID's VoteHistory
 func (vl *VoterList) UpdatePollData(voterID uint, newVoter Voter) error {
 
 	voter, ok := vl.Voters[voterID]

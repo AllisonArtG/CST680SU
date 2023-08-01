@@ -1,7 +1,6 @@
 package api
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -21,32 +20,6 @@ func NewVoterApi() *VoterAPI {
 			Voters: make(map[uint]voter.Voter),
 		},
 	}
-}
-
-// The Professor's Functions
-
-// func (v *VoterAPI) AddVoter(voterID uint, firstName, lastName string) {
-// 	v.voterList.Voters[voterID] = *voter.NewVoter(voterID, firstName, lastName)
-// }
-
-// func (v *VoterAPI) AddPoll(voterID, pollID uint) {
-// 	voter := v.voterList.Voters[voterID]
-// 	voter.AddPoll(pollID)
-// 	v.voterList.Voters[voterID] = voter
-// }
-
-// func (v *VoterAPI) GetVoterJson(voterID uint) string {
-// 	voter := v.voterList.Voters[voterID]
-// 	return voter.ToJson()
-// }
-
-func (v *VoterAPI) GetVoterList() voter.VoterList {
-	return v.voterList
-}
-
-func (v *VoterAPI) GetVoterListJson() string {
-	b, _ := json.Marshal(v.voterList)
-	return string(b)
 }
 
 // THE API FUNCTIONS
@@ -82,6 +55,7 @@ func (v *VoterAPI) GetVoter(c *gin.Context) {
 
 // implementation for POST /voters
 // adds a new Voter
+// any data included in the Voter's VoteHistory is ignored
 func (v *VoterAPI) AddVoter(c *gin.Context) {
 
 	var voter voter.Voter
@@ -129,7 +103,7 @@ func (v *VoterAPI) GetPollData(c *gin.Context) {
 	idS := c.Param("id")
 	id64, err := strconv.ParseUint(idS, 10, 32)
 	if err != nil {
-		log.Println(fmt.Sprintf("Error converting VoterID %v to uint64: ", idS), err)
+		log.Println(fmt.Sprintf("Error converting Voter ID %v to uint64: ", idS), err)
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
@@ -137,7 +111,7 @@ func (v *VoterAPI) GetPollData(c *gin.Context) {
 	pollidS := c.Param("pollid")
 	pollid64, err := strconv.ParseUint(pollidS, 10, 32)
 	if err != nil {
-		log.Println(fmt.Sprintf("Error converting PollID %v to uint64: ", pollidS), err)
+		log.Println(fmt.Sprintf("Error converting poll with PollID %v to uint64: ", pollidS), err)
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
@@ -153,7 +127,9 @@ func (v *VoterAPI) GetPollData(c *gin.Context) {
 }
 
 // implementation for POST /voters/:id/polls
-// adds the poll data (voterPoll) for the Voter with ID id and voterPoll pollid
+// adds the poll data (voterPoll) to the VoteHistory of the Voter with ID id
+// only one voterPoll can be added at a time, and additional fields in Voter
+// outside of VoteHistory are ignored (VoterID, FirstName, LastName)
 func (v *VoterAPI) AddPollData(c *gin.Context) {
 
 	idS := c.Param("id")
@@ -181,6 +157,7 @@ func (v *VoterAPI) AddPollData(c *gin.Context) {
 }
 
 // implementation of GET /voters/health
+// returns the health of the Voter-API Application
 func (v *VoterAPI) GetHealth(c *gin.Context) {
 	c.JSON(http.StatusOK,
 		gin.H{
@@ -191,6 +168,8 @@ func (v *VoterAPI) GetHealth(c *gin.Context) {
 			"errors_encountered": 10,
 		})
 }
+
+// Extra Credit Handlers
 
 // implementation for DELETE /voters/:id
 // deletes a Voter
@@ -205,7 +184,7 @@ func (v *VoterAPI) DeleteVoter(c *gin.Context) {
 
 	if err := v.voterList.DeleteVoter(uint(id64)); err != nil {
 		log.Println(fmt.Sprintf("Error deleting Voter with ID %v: ", id64), err)
-		c.AbortWithStatus(http.StatusInternalServerError)
+		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
 
@@ -242,7 +221,10 @@ func (v *VoterAPI) DeletePollData(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
-// implementation for PUT /voters/:id
+// implementation for PUT /voters
+// updates the Voter fields (FirstName, LastName) of a Voter
+// any data included in the Voter's VoteHistory is ignored
+// if any of the Voter fields are omitted, then the original ones remain unchanged
 func (v *VoterAPI) UpdateVoter(c *gin.Context) {
 
 	var voter voter.Voter
@@ -263,6 +245,9 @@ func (v *VoterAPI) UpdateVoter(c *gin.Context) {
 }
 
 // implementation for PUT /voters/:id/polls
+// updates a voterPoll, specifically its VoteDate, of the Voter with ID id
+// only one voterPoll is allowed to be updated at a time
+// any data in the Voter fields outside of VoteHistory will be ignored
 func (v *VoterAPI) UpdatePollData(c *gin.Context) {
 	idS := c.Param("id")
 	id64, err := strconv.ParseUint(idS, 10, 32)
@@ -288,6 +273,8 @@ func (v *VoterAPI) UpdatePollData(c *gin.Context) {
 	c.Status(http.StatusOK)
 
 }
+
+// Leftover Handler from Todo
 
 /*   SPECIAL HANDLERS FOR DEMONSTRATION - CRASH SIMULATION AND HEALTH CHECK */
 
