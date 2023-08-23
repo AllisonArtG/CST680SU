@@ -197,7 +197,6 @@ func (vl *VoterList) AddVoter(voter Voter) error {
 		return errors.New(fmt.Sprintf("A Voter with the ID %v already exists.", voter.VoterID))
 	}
 
-	// CHECK Later
 	if voter.VoteHistory == nil || len(voter.VoteHistory) > 0 {
 		voter.VoteHistory = make([]voterPoll, 0)
 	}

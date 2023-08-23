@@ -1,15 +1,34 @@
-## Voter API
+# Containerized Voter API
 
 This application uses the Golang Gin framework to create a Voter API.
 
 It keeps `Voter`s which are representations of a voter. Each `Voter` has the following fields: 
 `VoterID`, `FirstName`, `LastName`, `VoteHistory`. `VoteHistory` stores the poll data for different
-polls the `Voter` has voted in.
+polls the `Voter` has voted in.  
 
-To see everything you can do you can just run `make` and some of the make targets take parameters.  
+In this version, the data is stored in a Redis database. There are two containers the container for the Voter API (`voter-api-2`) and the one for the Redis database (`voter-cache`).
 
-#
+## To Run
 
+NOTE: This version (v2) of the Voter API does not persist changes to the database. If the redis container goes down, so will the data.
+
+### Run the following scripts (order does matter here)
+
+  ./start-redis.sh
+  ./build-better-docker.sh
+  ./run-better-docker.sh
+
+### Alternatively in One Step
+
+
+  docker compose up
+
+
+## The Makefile
+
+Everything remains the same as the previous assignment. 
+
+To see everything you can do you can just run `make` and some of the make targets take parameters.
 
 ```
 ➜  todo-api git:(main) make

@@ -1,2 +1,2 @@
 #!/bin/bash
-docker run -it --rm -p 1080:1080 voter-api:v2
+docker run -it --rm --name voter-api-2 -p 1080:1080 voter-api:v2

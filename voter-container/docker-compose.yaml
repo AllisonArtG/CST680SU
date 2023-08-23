@@ -1,15 +1,18 @@
-version: '2.0'
+version: '3.8'
 services:
   cache:
     image: redis/redis-stack:latest
-    container_name: todo-cache
+    container_name: voter-cache
     restart: always
     ports:
       - '6379:6379'
       - '8001:8001'
-  todo-api:
-    image: voter-api:v2
-    container_name: voter-api
+  voter-api:
+    image: voter-api:2
+    container_name: voter-api-2
+    build:
+      context: .
+      dockerfile: dockerfile.better
     restart: always
     ports:
       - '1080:1080'
