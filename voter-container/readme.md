@@ -10,18 +10,21 @@ In this version, the data is stored in a Redis database. There are two container
 
 ## To Run
 
-NOTE: This version (v2) of the Voter API does not persist changes to the database. If the redis container goes down, so will the data.
+NOTE: This version (v2) of the Voter API does not persist changes to the database. If the Redis Container goes down, so will the data.
 
 ### Run the following scripts (order does matter here)
 
-  ./start-redis.sh
-  ./build-better-docker.sh
-  ./run-better-docker.sh
+```
+./start-redis.sh
+./build-better-docker.sh
+./run-better-docker.sh
+```
 
 ### Alternatively in One Step
 
-
-  docker compose up
+```
+docker compose up
+```
 
 
 ## The Makefile
