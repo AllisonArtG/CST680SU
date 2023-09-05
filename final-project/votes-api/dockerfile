@@ -1,0 +1,36 @@
+# syntax=docker/dockerfile:1
+
+FROM golang:1.20 AS build-stage
+
+# Set destination for COPY
+WORKDIR /app
+
+# Copy files
+COPY . .
+
+#download dependencies
+RUN go mod download
+
+# Build
+RUN CGO_ENABLED=0 GOOS=linux go build -o /votes-api
+
+
+FROM alpine:latest AS run-stage
+
+# JUST put in root
+WORKDIR /
+
+# Copy binary from build stage
+COPY --from=build-stage /votes-api /votes-api
+
+# Expose port
+EXPOSE 3080
+
+#set env variables.  Note for a container to get access to the host machine, 
+#you reference the host machine by using host.docker.internal (at least in docker desktop)
+ENV VOTESAPI_CACHE_URL=host.docker.internal:6379
+ENV VOTESAPI_VOTER_API_URL=http://host.docker.internal:1080
+ENV VOTESAPI_POLL_API_URL=http://host.docker.internal:2080
+
+# Run
+CMD ["/votes-api"]

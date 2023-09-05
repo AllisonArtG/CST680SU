@@ -16,22 +16,18 @@ import (
 //STRUCTS
 
 type voterPoll struct {
-	PollID   uint
+	PollID   string
 	VoteDate time.Time
 }
 
 type Voter struct {
-	VoterID     uint
+	VoterID     string
 	FirstName   string `json:",omitempty"`
 	LastName    string `json:",omitempty"`
 	VoteHistory []voterPoll
 }
 
-// type VoterList struct {
-// 	Voters map[uint]Voter //A map of VoterIDs as keys and Voter structs as values
-// }
-
-func NewVoter(voterID uint, first string, last string) (*Voter, error) {
+func NewVoter(voterID string, first string, last string) (*Voter, error) {
 	voteHistory := make([]voterPoll, 0)
 	return &Voter{VoterID: voterID, FirstName: first, LastName: last, VoteHistory: voteHistory}, nil
 }
@@ -39,7 +35,7 @@ func NewVoter(voterID uint, first string, last string) (*Voter, error) {
 const (
 	RedisNilError        = "redis: nil"
 	RedisDefaultLocation = "0.0.0.0:6379"
-	RedisKeyPrefix       = "todo:"
+	RedisKeyPrefix       = "voter:"
 )
 
 type cache struct {
@@ -56,12 +52,12 @@ type VoterList struct {
 }
 
 // New is a constructor function that returns a pointer to a new
-// ToDo struct.  If this is called it uses the default Redis URL
+// VoterList struct.  If this is called it uses the default Redis URL
 // with the companion constructor NewWithCacheInstance.
 func New() (*VoterList, error) {
 	//We will use an override if the REDIS_URL is provided as an environment
 	//variable, which is the preferred way to wire up a docker container
-	redisUrl := os.Getenv("REDIS_URL")
+	redisUrl := os.Getenv("VOTERAPI_REDIS_URL")
 	//This handles the default condition
 	if redisUrl == "" {
 		redisUrl = RedisDefaultLocation
@@ -70,7 +66,7 @@ func New() (*VoterList, error) {
 }
 
 // NewWithCacheInstance is a constructor function that returns a pointer to a new
-// ToDo struct.  It accepts a string that represents the location of the redis
+// VoterList struct.  It accepts a string that represents the location of the redis
 // cache.
 func NewWithCacheInstance(location string) (*VoterList, error) {
 
@@ -101,7 +97,7 @@ func NewWithCacheInstance(location string) (*VoterList, error) {
 	jsonHelper := rejson.NewReJSONHandler()
 	jsonHelper.SetGoRedisClientWithContext(ctx, client)
 
-	//Return a pointer to a new ToDo struct
+	//Return a pointer to a new PollList struct
 	return &VoterList{
 		cache: cache{
 			cacheClient: client,
@@ -123,11 +119,11 @@ func isRedisNilError(err error) bool {
 // In redis, our keys will be strings, they will look like
 // voter:<number>.  This function will take an unsigned integer and
 // return a string that can be used as a key in redis
-func redisKeyFromId(id uint) string {
-	return fmt.Sprintf("%s%d", RedisKeyPrefix, id)
+func redisKeyFromId(id string) string {
+	return fmt.Sprintf("%s%s", RedisKeyPrefix, id)
 }
 
-// Helper to return a ToDoItem from redis provided a key
+// Helper to return a Voter from redis provided a key
 func (vl *VoterList) getItemFromRedis(key string, voter *Voter) error {
 
 	//Lets query redis for the item, note we can return parts of the
@@ -158,12 +154,12 @@ func (vl *VoterList) getItemFromRedis(key string, voter *Voter) error {
 func (vl *VoterList) GetAllVoters() ([]Voter, error) {
 
 	var voters []Voter
-	var voter Voter
 
 	//Lets query redis for all of the items
 	key := RedisKeyPrefix + "*"
 	ks, _ := vl.cacheClient.Keys(vl.context, key).Result()
 	for _, key := range ks {
+		var voter Voter
 		err := vl.getItemFromRedis(key, &voter)
 		if err != nil {
 			return nil, err
@@ -175,7 +171,7 @@ func (vl *VoterList) GetAllVoters() ([]Voter, error) {
 }
 
 // returns the Voter with the VoterID voterID
-func (vl *VoterList) GetVoter(voterID uint) (Voter, error) {
+func (vl *VoterList) GetVoter(voterID string) (Voter, error) {
 
 	var voter Voter
 	key := redisKeyFromId(voterID)
@@ -209,7 +205,7 @@ func (vl *VoterList) AddVoter(voter Voter) error {
 }
 
 // returns the Voter's voterPoll where the PollID matches pollID
-func (vl *VoterList) GetVoterPoll(voterID, pollID uint) (voterPoll, error) {
+func (vl *VoterList) GetVoterPoll(voterID, pollID string) (voterPoll, error) {
 	key := redisKeyFromId(voterID)
 	var voter Voter
 	if err := vl.getItemFromRedis(key, &voter); err != nil {
@@ -230,20 +226,20 @@ func (vl *VoterList) GetVoterPoll(voterID, pollID uint) (voterPoll, error) {
 	if len(relevantPolls) == 0 {
 		return voterPoll{}, errors.New(fmt.Sprintf("Poll with ID %v not found in voter %v's history.", pollID, voterID))
 	} else if len(relevantPolls) > 1 {
-		return voterPoll{}, errors.New(fmt.Sprintf("There is an error with the internal state. Voter %v was allowed to vote more than once in poll %v.", voterID, pollID))
+		return voterPoll{}, errors.New(fmt.Sprintf("There is an error with the internal state. Multiple instances of voterPoll with ID %v in Voter %v's VoteHistory.", pollID, voterID))
 	} else {
 		return relevantPolls[0], nil
 	}
 
 }
 
-// AddVoterPoll accepts the voterID and a new Voter and adds the voterPoll to the Voter's VoteHistory
-func (vl *VoterList) AddVoterPoll(voterID uint, newVoter Voter) error {
+// AddVoterPoll accepts the voterID, the pollID and a new Voter and adds the voterPoll to the Voter's VoteHistory
+func (vl *VoterList) AddVoterPoll(voterID, pollID string, newVoter Voter) error {
 
 	key := redisKeyFromId(voterID)
 	var existingVoter Voter
 	if err := vl.getItemFromRedis(key, &existingVoter); err != nil {
-		return errors.New(fmt.Sprintf("Voter with ID %v does not exist.", voterID))
+		return errors.New(fmt.Sprintf("Poll with ID %v does not exist.", voterID))
 	}
 
 	if len(newVoter.VoteHistory) > 1 || len(newVoter.VoteHistory) == 0 {
@@ -252,11 +248,13 @@ func (vl *VoterList) AddVoterPoll(voterID uint, newVoter Voter) error {
 
 	poll := newVoter.VoteHistory[0]
 
+	poll.PollID = pollID
+
 	if len(existingVoter.VoteHistory) != 0 {
 		for i := 0; i < len(existingVoter.VoteHistory); i++ {
 			currPoll := existingVoter.VoteHistory[i]
 			if currPoll.PollID == poll.PollID {
-				return errors.New(fmt.Sprintf("Poll with ID %v already exists in Voter %v's VoteHistory. Voters are only allowed to vote once per poll.", poll.PollID, voterID))
+				return errors.New(fmt.Sprintf("Poll with ID %v already exists in Voter %v's VoteHistory.", poll.PollID, voterID))
 			}
 		}
 	}
@@ -268,7 +266,7 @@ func (vl *VoterList) AddVoterPoll(voterID uint, newVoter Voter) error {
 }
 
 // deletes the Voter with the VoterID voterID from Voters
-func (vl *VoterList) DeleteVoter(voterID uint) error {
+func (vl *VoterList) DeleteVoter(voterID string) error {
 
 	key := redisKeyFromId(voterID)
 	numDeleted, err := vl.cacheClient.Del(vl.context, key).Result()
@@ -283,7 +281,7 @@ func (vl *VoterList) DeleteVoter(voterID uint) error {
 }
 
 // deletes the voterPoll with the PollID pollID from the Voter voterID
-func (vl *VoterList) DeleteVoterPoll(voterID, pollID uint) error {
+func (vl *VoterList) DeleteVoterPoll(voterID, pollID string) error {
 
 	key := redisKeyFromId(voterID)
 	var voter Voter
@@ -340,7 +338,7 @@ func (vl *VoterList) UpdateVoter(newVoter Voter) error {
 }
 
 // updates an existing voterPoll in Voter voterID's VoteHistory
-func (vl *VoterList) UpdatePollData(voterID uint, newVoter Voter) error {
+func (vl *VoterList) UpdatePollData(voterID, pollID string, newVoter Voter) error {
 
 	key := redisKeyFromId(voterID)
 	var voter Voter
@@ -353,6 +351,8 @@ func (vl *VoterList) UpdatePollData(voterID uint, newVoter Voter) error {
 	}
 
 	newPoll := newVoter.VoteHistory[0]
+
+	newPoll.PollID = pollID
 
 	for index, currPoll := range voter.VoteHistory {
 		if currPoll.PollID == newPoll.PollID {

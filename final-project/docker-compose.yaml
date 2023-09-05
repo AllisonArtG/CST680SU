@@ -2,19 +2,69 @@ version: '3.8'
 services:
   cache:
     image: redis/redis-stack:latest
-    container_name: voter-cache
-    restart: always
+    container_name: cache
+    restart: on-failure
     ports:
       - '6379:6379'
       - '8001:8001'
+    networks:
+      - backend
+  
   voter-api:
-    image: voter-api:2
-    container_name: voter-api-2
+    image: voter-api:v3
+    container_name: todo-api-3
     build:
       context: .
-      dockerfile: dockerfile.better
+      dockerfile: voter-api/dockerfile
     restart: always
     ports:
       - '1080:1080'
     depends_on:
       - cache
+    environment:
+      - REDIS_URL=cache:6379
+    networks:
+      - frontend
+      - backend
+    
+  poll-api:
+    image: poll-api:v1
+    container_name: poll-api-1
+    build:
+      context: .
+      dockerfile: poll-api/dockerfile
+    restart: always
+    ports:
+      - '2080:2080'
+    depends_on:
+      - cache
+    environment:
+      - REDIS_URL=cache:6379
+    networks:
+      - frontend
+      - backend
+  
+  votes-api:
+    image: votes-api:v1
+    container_name: votes-api-1
+    build:
+      context: .
+      dockerfile: votes-api/dockerfile
+    restart: always
+    ports:
+      - '3080:3080'
+    depends_on:
+      - cache
+    environment:
+      - VOTESAPI_CACHE_URL=cache:6379
+      - VOTESAPI_VOTER_API_URL=http://voter-api:1080 
+      - VOTESAPI_POLL_API_URL=http://poll-api:2080 
+    networks:
+      - frontend
+      - backend
+
+networks:
+  frontend:
+    internal: false
+  backend:
+    internal: true

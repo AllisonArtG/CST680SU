@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"drexel.edu/voter-api/api"
+	"drexel.edu/poll-api/api"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -31,7 +31,7 @@ func processCmdLineFlags() {
 	//We set this up as a flag so that we can overwrite it on the command line if
 	//needed
 	flag.StringVar(&hostFlag, "h", "0.0.0.0", "Listen on all interfaces")
-	flag.UintVar(&portFlag, "p", 1080, "Default Port")
+	flag.UintVar(&portFlag, "p", 2080, "Default Port")
 
 	flag.Parse()
 }
@@ -44,35 +44,28 @@ func main() {
 	r := gin.Default()
 	r.Use(cors.Default())
 
-	apiHandler, err := api.NewVoterApi()
+	apiHandler, err := api.NewPollApi()
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
-	r.GET("/voters", apiHandler.GetAllVoters)
+	r.GET("/polls", apiHandler.GetAllPolls)
 
-	r.GET("/voters/:id", apiHandler.GetVoter)
-	r.POST("/voters", apiHandler.AddVoter)
+	r.GET("/polls/:id", apiHandler.GetPoll)
+	r.POST("/polls/:id", apiHandler.AddPoll)
 
-	r.GET("/voters/:id/polls", apiHandler.GetVoteHistory)
+	r.GET("/polls/:id/options", apiHandler.GetPollOptions)
 
-	r.GET("/voters/:id/polls/:pollid", apiHandler.GetPollData)
-	r.POST("/voters/:id/polls", apiHandler.AddPollData)
+	r.GET("/polls/:id/options/:optionid", apiHandler.GetPollOption)
+	r.POST("/polls/:id/options/:optionid", apiHandler.AddPollOption)
 
-	r.GET("/voters/health", apiHandler.GetHealth)
+	r.GET("/polls/health", apiHandler.GetHealth)
 
-	// EXTRA CREDIT
+	// Extra Credit Handlers
 
-	r.DELETE("/voters/:id", apiHandler.DeleteVoter)
-	r.DELETE("/voters/:id/polls/:pollid", apiHandler.DeletePollData)
-
-	r.PUT("/voters", apiHandler.UpdateVoter)
-	r.PUT("/voters/:id/polls", apiHandler.UpdatePollData)
-
-	// LEFTOVERS (from todo-api)
-
-	r.GET("/crash", apiHandler.CrashSim)
+	r.DELETE("/polls/:id", apiHandler.DeletePoll)
+	r.DELETE("/polls/:id/options/:optionid", apiHandler.DeletePollOption)
 
 	serverPath := fmt.Sprintf("%s:%d", hostFlag, portFlag)
 	r.Run(serverPath)

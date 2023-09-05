@@ -1,0 +1,24 @@
+[
+    {
+        "VoterID": 1,
+        "FirstName": "John",
+        "LastName": "Doe",
+        "VoteHistory": [
+            {
+                "PollID": 1,
+                "VoteDate": "2020-11-30T14:20:28.000Z"
+            }
+        ]
+    },
+    {
+        "VoterID": 2,
+        "FirstName": "John",
+        "LastName": "Doe",
+        "VoteHistory": [
+            {
+                "PollID": 1,
+                "VoteDate": "2020-11-30T14:20:28.000Z"
+            }
+        ]
+    }
+]
