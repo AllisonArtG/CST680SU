@@ -1,72 +1,107 @@
-# Containerized Voter API
+# Containerized API System
 
-This application uses the Golang Gin framework to create a Voter API.
+## Description
 
-It keeps `Voter`s which are representations of a voter. Each `Voter` has the following fields: 
-`VoterID`, `FirstName`, `LastName`, `VoteHistory`. `VoteHistory` stores the poll data for different
-polls the `Voter` has voted in.  
+This application uses the Golang Gin framework to create containerized APIs: Voter API, Poll API and Votes API. It uses Hypermedia to support the intra-API integration.
 
-In this version, the data is stored in a Redis database. There are two containers the container for the Voter API (`voter-api-2`) and the one for the Redis database (`voter-cache`).
+All the data is stored in a Redis database.
+
+NOTE: The APIs do not persist changes to the Redis database. If the Redis Container goes down, so will the data.
+
+```
+               ┏━━━━━━━━━━━┓               
+      ┌───────▶┃ Votes API ┃◀────────┐     
+      ▼        ┗━━━━━━━━━━━┛         ▼     
+┌───────────┐        │         ┌──────────┐
+│ Voter API │        │         │ Poll API │
+└───────────┘        │         └──────────┘
+      │              │                │    
+      ▼              ▼                ▼    
+┌─────────────────────────────────────────┐
+│              Cache (Redis)              │
+└─────────────────────────────────────────┘
+```
+
+### The Votes API
+
+The Votes API is the primarly API and drives the voting system. 
+
+1. When a `Vote` is added, deleted, and updated, the Votes API queries the Voter API in order to properly update the `Voter`'s `VoteHistory`. It also validates that the provided `Vote` fields: `VoterID`, `PollID`, and `VoteValue` (`PollOptionID`) and makes sure they exist in the Poll API or Voter API before updating Redis.
+2. The Votes API also has GET endpoints that essentially serve as relays to the GET endpoints of the Voter API and the Poll API. This allows the two other APIs to get the necessary information without querying each other directly.
+3. The Votes API is not the master, so a real Voting Application utilizing these APIs would still need to query the other APIs to create, delete, and update a `Voter`/`Poll`.
+
+### The Voter API
+
+The Voter API manages all the `Voter`s.
+
+1. The Voter API does validate that a `Poll` exists via the Votes API (relay) before adding, deleting, or updating a `voterPoll` to the `Voter`'s `VoteHistory`.
+
+### The Poll API
+
+The Poll API manages all the `Poll`s and their `PollOptions`.
+
+1. The Poll API is the only API that does not rely on other APIs and thus does not do validation.
 
 ## To Run
 
-NOTE: This version (v2) of the Voter API does not persist changes to the database. If the Redis Container goes down, so will the data.
-
-### Run the following scripts (order does matter here)
-
-```
-./start-redis.sh
-./build-better-docker.sh
-./run-better-docker.sh
-```
-
-### Alternatively in One Step
+Delete any lingering containers, particularly the Redis container. Then from the root of the current project (`CST680SU/final-project`) run the following to bring up all the containers.
 
 ```
 docker compose up
 ```
 
+## To Test
 
-## The Makefile
+First import my Postman Collection (TODO) and my Postman Environment (TODO) into Postman.
 
-Everything remains the same as the previous assignment. 
+You will first need to load the test data into the Redis Database. Simply run the `Load Data` folder.
 
-To see everything you can do you can just run `make` and some of the make targets take parameters.
+From there please run all the folders in order except the last one (`Delete Data`). Each folder performs system tests on each of the APIs, except the `Poll` folder which consists only of unit tests. It is important to run the Requests in each folder in order, as the tests rely on prior Requests in the folder.
+
+If one of the tests (or Requests) fails, please run the `Delete Data` folder followed by the `Load Data` folder to ensure the data is correct before running the problem folder again in order to investigate what went wrong.
+
+## The Structs
+
+The Structs used by the APIs are the same as in my API_Design_2 document, however they are also listed below for your reference.
+
+### Votes API
 
 ```
-➜  todo-api git:(main) make
-Usage make <TARGET>
+type Vote struct {
+	VoteID    string
+	VoterID   string
+	PollID    string
+	VoteValue string
+}
+```
 
-  Targets:
+### Voter API
 
-          build                         Build the voter executable
-          build-amd64-linux	            Build amd64/Linux executable
-          build-arm64-linux	            Build arm64/Linux executable
-          run                           Run the voter program from code
-          run-bin                       Run the voter executable
-          load-db                       Add sample data via curl
-          get-all-voters                Get all voters
-          get-voter-by-id               Get a voter by id pass id=<id> on command line
-          add-voter                     Add a voter pass voter=<voter> on command line"
-                                        e.g. voter='{"VoterID": 3, "FirstName": "James", "LastName": "Liu"}'
-                                        Ignores any data in VoteHistory and simply initializes an empty slice
-          get-history-by-id             Get a voter's voting history by id pass id=<id> on command line
-          get-poll-data                 Get a voter's poll data pass id=<id> pollid=<pollid> on command line
-          add-poll-data                 Add poll data to a voter's history pass id=<id> voter=<voter> on    
-                                        command line
-                                        e.g. id=3 voter='{[{"PollID": 4, "VoteDate": "2022-11-30T14:20:28.000Z"}'
-                                        Any other voter fields will be ignored (VoterID, FirstName, LastName)
-                                        Only one poll data item is allowed to be added at a time
-          delete-voter-by-id            Delete a voter by id pass id=<id> on command line
-          delete-poll-data              Delete a voter's poll data pass id=<id> pollid=<pollid> on command  
-                                        line
-          update-voter                  Update a voter pass voter=<voter> on command line"
-                                        e.g. voter='{"VoterID": 3, "FirstName": "Jimmy", "LastName": "Liu"}'
-                                        This only updates FirstName and Lastname, so anything in VoteHistory will be ignored
-          update-poll-data              Update a voter's poll data pass id=<id> voter=<voter> on command  
-                                        line
-                                        e.g. id=3 voter='{[{"PollID": 4, "VoteDate": "2022-12-10T14:20:28.000Z"})'
-                                        This only updates VoteDate of a poll, so any of the other in Voter fields outside of
-                                        VoteHistory will be ignored
-          get-health                    Get health of the Voter-API Application
+```
+type Voter struct {
+	VoterID     string
+	FirstName   string
+	LastName    string
+	VoteHistory []voterPoll
+}
+
+type voterPoll struct {
+	PollID   string
+	VoteDate time.Time
+}
+```
+
+### Poll API
+```
+type Poll struct {
+	PollID       string
+	PollTitle    string
+	PollQuestion string
+	PollOptions  []pollOption
+}
+
+type pollOption struct {
+	PollOptionID    string
+	PollOptionText  string
+}
 ```
