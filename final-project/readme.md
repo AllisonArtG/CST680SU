@@ -1,5 +1,7 @@
 # Containerized API System
 
+By Allison Gong
+
 ## Description
 
 This application uses the Golang Gin framework to create containerized APIs: Voter API, Poll API and Votes API. It uses Hypermedia to support the intra-API integration.
@@ -34,7 +36,7 @@ The Votes API is the primarly API and drives the voting system.
 
 The Voter API manages all the `Voter`s.
 
-1. The Voter API does validate that a `Poll` exists via the Votes API (relay) before adding, deleting, or updating a `voterPoll` to the `Voter`'s `VoteHistory`.
+1. The Voter API does validate that a `Poll` exists via the Votes API (relay) before adding a `voterPoll` to the `Voter`'s `VoteHistory`.
 
 ### The Poll API
 
@@ -52,7 +54,7 @@ docker compose up
 
 ## To Test
 
-First import my Postman Collection (TODO) and my Postman Environment (TODO) into Postman.
+First import my Postman Collection `CST680SU.postman_collection.json` and my Postman Environment `CST680SU_Localhost.postman_environment.json` into Postman.
 
 You will first need to load the test data into the Redis Database. Simply run the `Load Data` folder.
 

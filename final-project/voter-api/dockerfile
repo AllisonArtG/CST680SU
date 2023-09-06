@@ -28,7 +28,8 @@ EXPOSE 1080
 
 #set env variables.  Note for a container to get access to the host machine, 
 #you reference the host machine by using host.docker.internal (at least in docker desktop)
-ENV VOTERAPI_REDIS_URL=host.docker.internal:6379
+ENV VOTERAPI_CACHE_URL=host.docker.internal:6379
+ENV VOTERAPI_VOTES_API_URL=http://host.docker.internal:3080
 
 # Run
 CMD ["/voter-api"]

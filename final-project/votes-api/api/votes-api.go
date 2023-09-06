@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"regexp"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
@@ -65,6 +66,19 @@ func NewVotesAPI(location string, voterAPIurl string, pollAPIurl string) (*Votes
 		pollAPIURL:  pollAPIurl,
 		apiClient:   apiClient,
 	}, nil
+}
+
+func (v *VotesAPI) NewVoterVoteHistoryString(pollID string) string {
+	newVoter := schema.Voter{
+		VoteHistory: []schema.VoterPoll{
+			schema.VoterPoll{
+				PollID:   pollID,
+				VoteDate: time.Now().UTC(),
+			},
+		},
+	}
+	bvoter, _ := json.Marshal(&newVoter)
+	return string(bvoter)
 }
 
 func (v *VotesAPI) GetAllVotes(c *gin.Context) {
@@ -168,7 +182,17 @@ func (v *VotesAPI) AddVote(c *gin.Context) {
 		return
 	}
 
-	// TODO: Add the voterPoll to Voter.VoteHistory
+	// Add the voterPoll to Voter.VoteHistory
+	resp, err = v.apiClient.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(v.NewVoterVoteHistoryString(vote.PollID)).
+		Post(v.voterAPIURL + vote.VoterID + vote.PollID)
+
+	if err != nil || resp.Status() != "200 OK" {
+		log.Println(fmt.Sprintf("Could not add voterPoll %v to Voter %v's VoteHistory", vote.PollID, vote.VoterID))
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
 
 	c.Status(http.StatusOK)
 
@@ -180,7 +204,15 @@ func (v *VotesAPI) DeleteVote(c *gin.Context) {
 
 	voteid := c.Request.URL.String()
 
+	var vote schema.Vote
 	key := redisKeyFromId(voteid)
+	err := v.getVoteFromRedis(key, &vote)
+	if err != nil {
+		log.Println(fmt.Sprintf("Vote %v does not exist.", voteid), err)
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+
 	numDeleted, err := v.client.Del(v.context, key).Result()
 	if err != nil {
 		log.Println(fmt.Sprintf("An error occurred deleting Vote %v from Redis.", voteid) + err.Error())
@@ -192,6 +224,20 @@ func (v *VotesAPI) DeleteVote(c *gin.Context) {
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
+
+	// Delete the voterPoll from Voter.VoteHistory
+	resp, err := v.apiClient.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(v.NewVoterVoteHistoryString(vote.PollID)).
+		Delete(v.voterAPIURL + vote.VoterID + vote.PollID)
+
+	if err != nil || resp.Status() != "200 OK" {
+		log.Println(fmt.Sprintf("Could not delete voterPoll %v from Voter %v's VoteHistory", vote.PollID, vote.VoterID))
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.Status(http.StatusOK)
 }
 
 // Update Vote
@@ -247,7 +293,27 @@ func (v *VotesAPI) UpdateVote(c *gin.Context) {
 		return
 	}
 
+	// update Voter.VoteHistory's voterPoll
+
+	// Add the voterPoll to Voter.VoteHistory
+	resp, err = v.apiClient.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(v.NewVoterVoteHistoryString(existingVote.PollID)).
+		Put(v.voterAPIURL + existingVote.VoterID + existingVote.PollID)
+
+	if err != nil || resp.Status() != "200 OK" {
+		log.Println(fmt.Sprintf("Could not update voterPoll %v to Voter %v's VoteHistory", vote.PollID, vote.VoterID))
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
 }
+
+// Additonal Handlers
+// All the handlers here serve a hand-off where they call Poll API
+// or Voter API's GET Handlers to pass along information. All these
+// endpoints are prefaced with /votes to emphasize they are separate
+// from the original endpoints (in a different API)
 
 // /votes/polls
 func (v *VotesAPI) GetAllPolls(c *gin.Context) {
@@ -261,7 +327,7 @@ func (v *VotesAPI) GetAllPolls(c *gin.Context) {
 
 	resp, err := v.apiClient.R().SetResult(&polls).Get(pollURL)
 	if err != nil || resp.Status() != "200 OK" {
-		log.Println(fmt.Sprintf("Could not get Polls from Poll API", pollsS) + err.Error())
+		log.Println(fmt.Sprintf("Could not get Polls from Poll API", pollsS))
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
@@ -280,7 +346,7 @@ func (v *VotesAPI) GetPoll(c *gin.Context) {
 	var poll schema.Poll
 	resp, err := v.apiClient.R().SetResult(&poll).Get(pollURL)
 	if err != nil || resp.Status() != "200 OK" {
-		log.Println(fmt.Sprintf("Could not get Poll %v from Poll API", pollidS) + err.Error())
+		log.Println(fmt.Sprintf("Could not get Poll %v from Poll API", pollidS))
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
@@ -288,18 +354,37 @@ func (v *VotesAPI) GetPoll(c *gin.Context) {
 
 }
 
+// /votes/polls/:pollid/options
+func (v *VotesAPI) GetPollOptions(c *gin.Context) {
+
+	url := c.Request.URL.String()
+	re := regexp.MustCompile(`/polls/\d+/options$`)
+	optionsidS := string(re.Find([]byte(url)))
+
+	pollURL := v.pollAPIURL + optionsidS
+	options := []schema.PollOption{}
+	resp, err := v.apiClient.R().SetResult(&options).Get(pollURL)
+	if err != nil || resp.Status() != "200 OK" {
+		log.Println(fmt.Sprintf("Could not get pollOptions from Poll API", optionsidS))
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+	c.JSON(http.StatusOK, options)
+
+}
+
 // /votes/polls/:pollid/options/:optionid
 func (v *VotesAPI) GetPollOption(c *gin.Context) {
 
 	url := c.Request.URL.String()
-	re := regexp.MustCompile(`/polls/\d+/options\d+$`)
+	re := regexp.MustCompile(`/polls/\d+/options/\d+$`)
 	optionidS := string(re.Find([]byte(url)))
 
 	pollURL := v.pollAPIURL + optionidS
 	var pollOption schema.PollOption
 	resp, err := v.apiClient.R().SetResult(&pollOption).Get(pollURL)
 	if err != nil || resp.Status() != "200 OK" {
-		log.Println(fmt.Sprintf("Could not get pollOption %v from Poll API", optionidS) + err.Error())
+		log.Println(fmt.Sprintf("Could not get pollOption %v from Poll API", optionidS))
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
@@ -319,7 +404,7 @@ func (v *VotesAPI) GetAllVoters(c *gin.Context) {
 
 	resp, err := v.apiClient.R().SetResult(&voters).Get(voterURL)
 	if err != nil || resp.Status() != "200 OK" {
-		log.Println(fmt.Sprintf("Could not get Voters from Voter API", votersS) + err.Error())
+		log.Println("Could not get Voters from Voter API")
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
@@ -338,7 +423,7 @@ func (v *VotesAPI) GetVoter(c *gin.Context) {
 	var voter schema.Voter
 	resp, err := v.apiClient.R().SetResult(&voter).Get(voterURL)
 	if err != nil || resp.Status() != "200 OK" {
-		log.Println(fmt.Sprintf("Could not get Voter %v from Poll API", &voter) + err.Error())
+		log.Println(fmt.Sprintf("Could not get Voter %v from Poll API", voteridS))
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
@@ -346,68 +431,43 @@ func (v *VotesAPI) GetVoter(c *gin.Context) {
 
 }
 
+// /votes/voters/:voterid/polls
+func (v *VotesAPI) GetVoterPolls(c *gin.Context) {
+
+	url := c.Request.URL.String()
+	re := regexp.MustCompile(`/voters/\d+/polls$`)
+	voterpollidS := string(re.Find([]byte(url)))
+
+	voterURL := v.voterAPIURL + voterpollidS
+	voterPolls := []schema.VoterPoll{}
+	resp, err := v.apiClient.R().SetResult(&voterPolls).Get(voterURL)
+	if err != nil || resp.Status() != "200 OK" {
+		log.Println("Could not get voterPolls from Voter API")
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+	c.JSON(http.StatusOK, voterPolls)
+
+}
+
 // /votes/voters/:voterid/polls/:pollid
 func (v *VotesAPI) GetVoterPoll(c *gin.Context) {
 
 	url := c.Request.URL.String()
-	re := regexp.MustCompile(`/voters/\d+/pollss\d+$`)
+	re := regexp.MustCompile(`/voters/\d+/polls/\d+$`)
 	voterpollidS := string(re.Find([]byte(url)))
 
 	voterURL := v.voterAPIURL + voterpollidS
 	var voterPoll schema.VoterPoll
 	resp, err := v.apiClient.R().SetResult(&voterPoll).Get(voterURL)
 	if err != nil || resp.Status() != "200 OK" {
-		log.Println(fmt.Sprintf("Could not get voterPoll %v from Voter API", voterpollidS) + err.Error())
+		log.Println(fmt.Sprintf("Could not get voterPoll %v from Voter API", voterpollidS))
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
 	c.JSON(http.StatusOK, voterPoll)
 
 }
-
-// func (r *ReadingListAPI) RedirectWithPublication(c *gin.Context) {
-// 	rlId := c.Param("id")
-// 	if rlId == "" {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": "No publication ID provided"})
-// 		return
-// 	}
-
-// 	rlIdxKey := c.Param("idx")
-// 	if rlIdxKey == "" {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": "No publication incdex provided"})
-// 		return
-// 	}
-
-// 	cacheKey := "publist:" + rlId
-// 	var rl schema.ReadingList
-// 	err := r.getItemFromRedis(cacheKey, &rl)
-// 	if err != nil {
-// 		c.JSON(http.StatusNotFound, gin.H{"error": "Could not find reading list in cache with id=" + cacheKey})
-// 		return
-// 	}
-
-// 	pubItemLocation, ok := rl.Items[rlIdxKey]
-// 	if !ok {
-// 		c.JSON(http.StatusNotFound, gin.H{"error": "Could not find publication in reading list with id=" + rlIdxKey})
-// 		return
-// 	}
-
-// 	pubURL := r.pubAPIURL + pubItemLocation
-// 	var pub schema.Publication
-
-// 	_, err = r.apiClient.R().SetResult(&pub).Get(pubURL)
-// 	if err != nil {
-// 		c.JSON(http.StatusNotFound, gin.H{"error": "Could not get publication from API"})
-// 		return
-// 	}
-
-// 	if pub.Link == "" {
-// 		c.JSON(http.StatusNotFound, gin.H{"error": "Publication does not have a link"})
-// 		return
-// 	}
-
-// 	c.Redirect(http.StatusMovedPermanently, pub.Link)
-// }
 
 //------------------------------------------------------------
 // REDIS HELPERS

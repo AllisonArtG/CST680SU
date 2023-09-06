@@ -8,14 +8,15 @@ services:
       - '6379:6379'
       - '8001:8001'
     networks:
+      - frontend
       - backend
   
   voter-api:
     image: voter-api:v3
-    container_name: todo-api-3
+    container_name: voter-api-3
     build:
-      context: .
-      dockerfile: voter-api/dockerfile
+      context: ./voter-api
+      dockerfile: dockerfile
     restart: always
     ports:
       - '1080:1080'
@@ -31,8 +32,8 @@ services:
     image: poll-api:v1
     container_name: poll-api-1
     build:
-      context: .
-      dockerfile: poll-api/dockerfile
+      context: ./poll-api
+      dockerfile: dockerfile
     restart: always
     ports:
       - '2080:2080'
@@ -48,8 +49,8 @@ services:
     image: votes-api:v1
     container_name: votes-api-1
     build:
-      context: .
-      dockerfile: votes-api/dockerfile
+      context: ./votes-api
+      dockerfile: dockerfile
     restart: always
     ports:
       - '3080:3080'

@@ -81,12 +81,12 @@ func main() {
 
 	r.GET("/votes/voters", apiHandler.GetAllVoters)
 	r.GET("/votes/voters/:voterid", apiHandler.GetVoter)
-	// r.GET("/votes/voters/:voterid/polls", apiHandler.GetVoterPolls)
+	r.GET("/votes/voters/:voterid/polls", apiHandler.GetVoterPolls)
 	r.GET("/votes/voters/:voterid/polls/:pollid", apiHandler.GetVoterPoll)
 
 	r.GET("/votes/polls", apiHandler.GetAllPolls)
 	r.GET("/votes/polls/:pollid", apiHandler.GetPoll)
-	// r.GET("/votes/polls/:pollid/options", apiHandler.GetPollOptions)
+	r.GET("/votes/polls/:pollid/options", apiHandler.GetPollOptions)
 	r.GET("/votes/polls/:pollid/options/:optionid", apiHandler.GetPollOption)
 
 	// EXTRA CREDIT

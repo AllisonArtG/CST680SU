@@ -3,7 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
+	"strconv"
 
 	"drexel.edu/voter-api/api"
 
@@ -11,44 +13,62 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Global variables to hold the command line flags to drive the todo CLI
-// application
 var (
-	hostFlag string
-	portFlag uint
+	hostFlag    string
+	portFlag    uint
+	cacheURL    string
+	votesAPIURL string
 )
-
-// processCmdLineFlags parses the command line flags for our CLI
 
 func processCmdLineFlags() {
 
-	//Note some networking lingo, some frameworks start the server on localhost
-	//this is a local-only interface and is fine for testing but its not accessible
-	//from other machines.  To make the server accessible from other machines, we
-	//need to listen on an interface, that could be an IP address, but modern
-	//cloud servers may have multiple network interfaces for scale.  With TCP/IP
-	//the address 0.0.0.0 instructs the network stack to listen on all interfaces
-	//We set this up as a flag so that we can overwrite it on the command line if
-	//needed
 	flag.StringVar(&hostFlag, "h", "0.0.0.0", "Listen on all interfaces")
+	flag.StringVar(&votesAPIURL, "votesapi", "http://localhost:3080", "Default endpoint for the Votes API")
+	flag.StringVar(&cacheURL, "c", "0.0.0.0:6379", "Default cache location")
 	flag.UintVar(&portFlag, "p", 1080, "Default Port")
 
 	flag.Parse()
 }
 
-// main is the entry point for our todo API application.  It processes
-// the command line flags and then uses the db package to perform the
-// requested operation
-func main() {
-	processCmdLineFlags()
-	r := gin.Default()
-	r.Use(cors.Default())
+func envVarOrDefault(envVar string, defaultVal string) string {
+	envVal := os.Getenv(envVar)
+	if envVal != "" {
+		return envVal
+	}
+	return defaultVal
+}
 
-	apiHandler, err := api.NewVoterApi()
+func setupParms() {
+	processCmdLineFlags()
+
+	cacheURL = envVarOrDefault("VOTERAPI_CACHE_URL", cacheURL)
+	votesAPIURL = envVarOrDefault("VOTERAPI_VOTES_API_URL", votesAPIURL)
+	hostFlag = envVarOrDefault("VOTERAPI_HOST", hostFlag)
+
+	pfNew, err := strconv.Atoi(envVarOrDefault("VOTERAPI_PORT", fmt.Sprintf("%d", portFlag)))
+
+	if err == nil {
+		portFlag = uint(pfNew)
+	}
+
+}
+
+func main() {
+
+	setupParms()
+	log.Println("Init/cacheURL: " + cacheURL)
+	log.Println("Init/votesAPIURL: " + votesAPIURL)
+	log.Println("Init/hostFlag: " + hostFlag)
+	log.Printf("Init/portFlag: %d", portFlag)
+
+	apiHandler, err := api.NewVoterApi(cacheURL, votesAPIURL)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+
+	r := gin.Default()
+	r.Use(cors.Default())
 
 	r.GET("/voters", apiHandler.GetAllVoters)
 
@@ -68,10 +88,6 @@ func main() {
 	r.DELETE("/voters/:id/polls/:pollid", apiHandler.DeletePollData)
 
 	r.PUT("/voters/:id/polls/:pollid", apiHandler.UpdatePollData)
-
-	// LEFTOVERS (from todo-api)
-
-	r.GET("/crash", apiHandler.CrashSim)
 
 	serverPath := fmt.Sprintf("%s:%d", hostFlag, portFlag)
 	r.Run(serverPath)

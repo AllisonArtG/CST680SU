@@ -14,8 +14,8 @@ type VoterAPI struct {
 	voterList *voter.VoterList
 }
 
-func NewVoterApi() (*VoterAPI, error) {
-	voterListHandler, err := voter.New()
+func NewVoterApi(location string, votesAPIurl string) (*VoterAPI, error) {
+	voterListHandler, err := voter.New(location, votesAPIurl)
 	if err != nil {
 		return nil, err
 	}
@@ -136,9 +136,6 @@ func (v *VoterAPI) AddPollData(c *gin.Context) {
 	re_pollid := regexp.MustCompile(`/polls/\d+$`)
 	pollidS := string(re_pollid.Find([]byte(url)))
 
-	// TODO: query poll-api to see if this poll even exists first before adding
-	// Determine if this is necessary and where best to do this.
-
 	var voter voter.Voter
 	if err := c.ShouldBindJSON(&voter); err != nil {
 		log.Println("Error binding JSON: ", err)
@@ -160,11 +157,8 @@ func (v *VoterAPI) AddPollData(c *gin.Context) {
 func (v *VoterAPI) GetHealth(c *gin.Context) {
 	c.JSON(http.StatusOK,
 		gin.H{
-			"status":             "ok",
-			"version":            "1.0.0",
-			"uptime":             100,
-			"users_processed":    1000,
-			"errors_encountered": 10,
+			"status":  "ok",
+			"version": "3.0.0",
 		})
 }
 
@@ -205,31 +199,6 @@ func (v *VoterAPI) DeletePollData(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
-// implementation for PUT /voters/:id
-// updates the Voter fields (FirstName, LastName) of a Voter
-// any data included in the Voter's VoteHistory is ignored
-// similarly, because the voter.VoterID field is redundant (it's equivalent
-// to the URL), if the user includes VoterID in the JSON it is simply overridden
-// by the URL
-// if any of the Voter fields are omitted, then the original ones remain unchanged
-func (v *VoterAPI) UpdateVoter(c *gin.Context) {
-
-	idS := c.Request.URL.String()
-
-	var voter voter.Voter
-
-	voter.VoterID = idS
-
-	if err := v.voterList.UpdateVoter(voter); err != nil {
-		log.Println(fmt.Sprintf("Error updating Voter %v: ", voter.VoterID), err)
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return
-	}
-
-	c.Status(http.StatusOK)
-
-}
-
 // implementation for PUT /voters/:id/polls/:pollid
 // updates a voterPoll, specifically its VoteDate, of the Voter with ID id
 // only one voterPoll is allowed to be updated at a time
@@ -260,16 +229,4 @@ func (v *VoterAPI) UpdatePollData(c *gin.Context) {
 
 	c.Status(http.StatusOK)
 
-}
-
-// Leftover Handler from Todo
-
-/*   SPECIAL HANDLERS FOR DEMONSTRATION - CRASH SIMULATION AND HEALTH CHECK */
-
-// implementation for GET /crash
-// This simulates a crash to show some of the benefits of the
-// gin framework
-func (v *VoterAPI) CrashSim(c *gin.Context) {
-	//panic() is go's version of throwing an exception
-	panic("Simulating an unexpected crash")
 }

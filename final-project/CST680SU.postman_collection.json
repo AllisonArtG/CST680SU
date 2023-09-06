@@ -1,0 +1,5189 @@
+{
+	"info": {
+		"_postman_id": "7478ce12-bda6-4952-9e12-e67d6669202c",
+		"name": "CST680SU",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29129146"
+	},
+	"item": [
+		{
+			"name": "Load Data",
+			"item": [
+				{
+					"name": "Add Poll 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status Code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"PollTitle\": \"Poll 1: Cats or Dogs?\",\n    \"PollQuestion\" : \"Do you prefer cats or dogs?\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{poll_port}}/polls/1",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{poll_port}}",
+							"path": [
+								"polls",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Poll 1 Option 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status Code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"PollOptions\": [\n        {\"PollOptionText\" : \"Cats\"}\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{poll_port}}/polls/1/options/1",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{poll_port}}",
+							"path": [
+								"polls",
+								"1",
+								"options",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Poll 1 Option 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status Code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"PollOptions\" : [\n        {\"PollOptionText\" : \"Dogs\"}\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{poll_port}}/polls/1/options/2",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{poll_port}}",
+							"path": [
+								"polls",
+								"1",
+								"options",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Poll 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status Code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"PollTitle\": \"Poll 2: Favorite Season\",\n    \"PollQuestion\" : \"What is your favorite season?\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{poll_port}}/polls/2",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{poll_port}}",
+							"path": [
+								"polls",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Poll 2 Option 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status Code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"PollOptions\" : [\n        {\"PollOptionText\" : \"Summer\"}\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{poll_port}}/polls/2/options/1",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{poll_port}}",
+							"path": [
+								"polls",
+								"2",
+								"options",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Poll 2 Option 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status Code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"PollOptions\" : [\n        {\"PollOptionText\" : \"Fall\"}\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{poll_port}}/polls/2/options/2",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{poll_port}}",
+							"path": [
+								"polls",
+								"2",
+								"options",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Poll 2 Option 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status Code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"PollOptions\" : [\n        {\"PollOptionText\" : \"Winter\"}\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{poll_port}}/polls/2/options/3",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{poll_port}}",
+							"path": [
+								"polls",
+								"2",
+								"options",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Poll 2 Option 4",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status Code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"PollOptions\" : [\n        {\"PollOptionText\" : \"Spring\"}\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{poll_port}}/polls/2/options/4",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{poll_port}}",
+							"path": [
+								"polls",
+								"2",
+								"options",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Voter 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status Code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"FirstName\" : \"John\",\n    \"LastName\" : \"Doe\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{voter_port}}/voters/1",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{voter_port}}",
+							"path": [
+								"voters",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Voter 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status Code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"VoterID\": \"/voters/2\",\n    \"FirstName\" : \"Jane\",\n    \"LastName\" : \"Lain\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{voter_port}}/voters/2",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{voter_port}}",
+							"path": [
+								"voters",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Vote 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status Code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"VoterID\" : \"/voters/1\",\n    \"PollID\" : \"/polls/1\",\n    \"VoteValue\" : \"/polls/1/options/2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{votes_port}}/votes/1",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{votes_port}}",
+							"path": [
+								"votes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Vote 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status Code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"VoterID\" : \"/voters/1\",\n    \"PollID\" : \"/polls/2\",\n    \"VoteValue\" : \"/polls/2/options/1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{votes_port}}/votes/2",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{votes_port}}",
+							"path": [
+								"votes",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Voter",
+			"item": [
+				{
+					"name": "Get All Voters",
+					"item": [
+						{
+							"name": "Get All Voters",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.length).to.eql(2);",
+											"",
+											"    for (var i = 0; i < responseJson.length; i++) { ",
+											"        if (responseJson[i].VoterID == \"/voters/1\"){",
+											"            pm.expect(responseJson[i].FirstName).to.eql(\"John\");",
+											"            pm.expect(responseJson[i].LastName).to.eql(\"Doe\");",
+											"            pm.expect(responseJson[i].VoteHistory.length).to.eql(2);",
+											"        }",
+											"        if (responseJson[i].VoterID == \"/voters/2\"){",
+											"            pm.expect(responseJson[i].FirstName).to.eql(\"Jane\");",
+											"            pm.expect(responseJson[i].LastName).to.eql(\"Lain\");",
+											"            pm.expect(responseJson[i].VoteHistory.length).to.eql(0);",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get Voter",
+					"item": [
+						{
+							"name": "Get Voter 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.VoterID).to.eql(\"/voters/1\")",
+											"    pm.expect(responseJson.FirstName).to.eql(\"John\");",
+											"    pm.expect(responseJson.LastName).to.eql(\"Doe\");",
+											"    pm.expect(responseJson.VoteHistory.length).to.eql(2);",
+											"",
+											"    for (var i = 0; i < responseJson.VoteHistory.length; i++) { ",
+											"        if (responseJson.VoteHistory[i].PollID == \"/polls/1\"){",
+											"            pm.expect(responseJson.VoteHistory[i].VoteDate.length).to.not.eql(0);",
+											"        }",
+											"        if (responseJson.VoteHistory[i].PollID == \"/polls/2\"){",
+											"            pm.expect(responseJson.VoteHistory[i].VoteDate.length).to.not.eql(0);",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/1",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Undefined Voter",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 404\", function () {",
+											"  pm.response.to.have.status(404);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/10",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"10"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get VoteHistory",
+					"item": [
+						{
+							"name": "Get Voter 1 VoteHistory",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.length).to.eql(2);",
+											"",
+											"    for (var i = 0; i < responseJson.length; i++) { ",
+											"        if (responseJson[i].PollID == \"/polls/1\"){",
+											"            pm.expect(responseJson[i].VoteDate.length).to.not.eql(0);",
+											"        }",
+											"        if (responseJson[i].PollID == \"/voters/2\"){",
+											"            pm.expect(responseJson[i].VoteDate.length).to.not.eql(0);",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/1/polls",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"1",
+										"polls"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Undefined Voter VoteHistory",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 404\", function () {",
+											"  pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/10/polls",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"10",
+										"polls"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get VoterPoll",
+					"item": [
+						{
+							"name": "Get Voter 1 Poll 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.PollID).to.eql(\"/polls/1\");",
+											"    pm.expect(responseJson.VoteDate.length).to.not.eql(0);",
+											"",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/1/polls/1",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"1",
+										"polls",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Undefined Voter VoterPoll 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 404\", function () {",
+											"  pm.response.to.have.status(404);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/10/options/1",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"10",
+										"options",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Voter 1 Undefined VoterPoll",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 404\", function () {",
+											"  pm.response.to.have.status(404);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/1/polls/10",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"1",
+										"polls",
+										"10"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Add Voter",
+					"item": [
+						{
+							"name": "Add Voter 3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"FirstName\" : \"Jennifer\",\n    \"LastName\" : \"Liu\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/3",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Voters",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.length).to.eql(3);",
+											"",
+											"    for (var i = 0; i < responseJson.length; i++) { ",
+											"        if (responseJson[i].VoterID == \"/voters/1\"){",
+											"            pm.expect(responseJson[i].FirstName).to.eql(\"John\");",
+											"            pm.expect(responseJson[i].LastName).to.eql(\"Doe\");",
+											"            pm.expect(responseJson[i].VoteHistory.length).to.eql(2);",
+											"        }",
+											"        if (responseJson[i].VoterID == \"/voters/2\"){",
+											"            pm.expect(responseJson[i].FirstName).to.eql(\"Jane\");",
+											"            pm.expect(responseJson[i].LastName).to.eql(\"Lain\");",
+											"            pm.expect(responseJson[i].VoteHistory.length).to.eql(0);",
+											"        }",
+											"        if (responseJson[i].VoterID == \"/voters/3\"){",
+											"            pm.expect(responseJson[i].FirstName).to.eql(\"Jennifer\");",
+											"            pm.expect(responseJson[i].LastName).to.eql(\"Liu\");",
+											"            pm.expect(responseJson[i].VoteHistory.length).to.eql(0);",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Voter 3 Again",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 500\", function () {",
+											"  pm.response.to.have.status(500);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"FirstName\" : \"Jenny\",\n    \"LastName\" : \"Kim\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/3",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Voter 3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.VoterID).to.eql(\"/voters/1\")",
+											"    pm.expect(responseJson.FirstName).to.eql(\"John\");",
+											"    pm.expect(responseJson.LastName).to.eql(\"Doe\");",
+											"    pm.expect(responseJson.VoteHistory.length).to.eql(2);",
+											"",
+											"    for (var i = 0; i < responseJson.VoteHistory.length; i++) { ",
+											"        if (responseJson.VoteHistory[i].PollID == \"/polls/1\"){",
+											"            pm.expect(responseJson.VoteHistory[i].VoteDate.length).to.not.eql(0);",
+											"        }",
+											"        if (responseJson.VoteHistory[i].PollID == \"/polls/2\"){",
+											"            pm.expect(responseJson.VoteHistory[i].VoteDate.length).to.not.eql(0);",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/1",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Add voterPoll",
+					"item": [
+						{
+							"name": "Add Voter 3 Poll 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"VoteHistory\" : [\n        {\n            \"VoteDate\" : \"2021-12-29T14:30:28.000Z\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/3/polls/2",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"3",
+										"polls",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Voter 3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.VoterID).to.eql(\"/voters/3\")",
+											"    pm.expect(responseJson.FirstName).to.eql(\"Jennifer\");",
+											"    pm.expect(responseJson.LastName).to.eql(\"Liu\");",
+											"    pm.expect(responseJson.VoteHistory.length).to.eql(1);",
+											"",
+											"    for (var i = 0; i < responseJson.VoteHistory.length; i++) { ",
+											"        if (responseJson.VoteHistory[i].PollID == \"/polls/2\"){",
+											"            pm.expect(responseJson.VoteHistory[i].VoteDate.length).to.not.eql(0);",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/3",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Voter 3 Undefined Poll",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 500\", function () {",
+											"  pm.response.to.have.status(500);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"VoteDate\" : \"2021-12-29T14:30:28.000Z\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/3/polls/10",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"3",
+										"polls",
+										"10"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Voter 3 Again",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.VoterID).to.eql(\"/voters/3\")",
+											"    pm.expect(responseJson.FirstName).to.eql(\"Jennifer\");",
+											"    pm.expect(responseJson.LastName).to.eql(\"Liu\");",
+											"    pm.expect(responseJson.VoteHistory.length).to.eql(1);",
+											"",
+											"    for (var i = 0; i < responseJson.VoteHistory.length; i++) { ",
+											"        if (responseJson.VoteHistory[i].PollID == \"/polls/2\"){",
+											"            pm.expect(responseJson.VoteHistory[i].VoteDate.length).to.not.eql(0);",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/3",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"3"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Update voterPoll",
+					"item": [
+						{
+							"name": "Update Voter 3 Poll 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"VoteHistory\" : [\n        {\n            \"VoteDate\" : \"2022-12-29T14:30:28Z\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/3/polls/2",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"3",
+										"polls",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Voter 3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.VoterID).to.eql(\"/voters/3\")",
+											"    pm.expect(responseJson.FirstName).to.eql(\"Jennifer\");",
+											"    pm.expect(responseJson.LastName).to.eql(\"Liu\");",
+											"    pm.expect(responseJson.VoteHistory.length).to.eql(1);",
+											"",
+											"    for (var i = 0; i < responseJson.VoteHistory.length; i++) { ",
+											"        if (responseJson.VoteHistory[i].PollID == \"/polls/2\"){",
+											"            pm.expect(responseJson.VoteHistory[i].VoteDate).to.eql(\"2022-12-29T14:30:28Z\")",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/3",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Voter 3 Undefined Poll",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 500\", function () {",
+											"  pm.response.to.have.status(500);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"VoteHistory\" : [\n        {\n            \"VoteDate\" : \"2021-12-29T14:30:28.000Z\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/3/polls/10",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"3",
+										"polls",
+										"10"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Voter 3 Again",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.VoterID).to.eql(\"/voters/3\")",
+											"    pm.expect(responseJson.FirstName).to.eql(\"Jennifer\");",
+											"    pm.expect(responseJson.LastName).to.eql(\"Liu\");",
+											"    pm.expect(responseJson.VoteHistory.length).to.eql(1);",
+											"",
+											"    for (var i = 0; i < responseJson.VoteHistory.length; i++) { ",
+											"        if (responseJson.VoteHistory[i].PollID == \"/polls/2\"){",
+											"            pm.expect(responseJson.VoteHistory[i].VoteDate).to.eql(\"2022-12-29T14:30:28Z\")",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/3",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Undefined Voter Poll 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 500\", function () {",
+											"  pm.response.to.have.status(500);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"VoteHistory\" : [\n        {\n            \"VoteDate\" : \"2021-12-29T14:30:28.000Z\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/10/polls/1",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"10",
+										"polls",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Voters",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.length).to.eql(3);",
+											"",
+											"    for (var i = 0; i < responseJson.length; i++) { ",
+											"        if (responseJson[i].VoterID == \"/voters/1\"){",
+											"            pm.expect(responseJson[i].FirstName).to.eql(\"John\");",
+											"            pm.expect(responseJson[i].LastName).to.eql(\"Doe\");",
+											"            pm.expect(responseJson[i].VoteHistory.length).to.eql(2);",
+											"        }",
+											"        if (responseJson[i].VoterID == \"/voters/2\"){",
+											"            pm.expect(responseJson[i].FirstName).to.eql(\"Jane\");",
+											"            pm.expect(responseJson[i].LastName).to.eql(\"Lain\");",
+											"            pm.expect(responseJson[i].VoteHistory.length).to.eql(0);",
+											"        }",
+											"        if (responseJson[i].VoterID == \"/voters/3\"){",
+											"            pm.expect(responseJson[i].FirstName).to.eql(\"Jennifer\");",
+											"            pm.expect(responseJson[i].LastName).to.eql(\"Liu\");",
+											"            pm.expect(responseJson[i].VoteHistory.length).to.eql(1);",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Delete voterPoll",
+					"item": [
+						{
+							"name": "Delete Voter 3 Poll 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/3/polls/2",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"3",
+										"polls",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Voter 3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.VoterID).to.eql(\"/voters/3\")",
+											"    pm.expect(responseJson.FirstName).to.eql(\"Jennifer\");",
+											"    pm.expect(responseJson.LastName).to.eql(\"Liu\");",
+											"    pm.expect(responseJson.VoteHistory.length).to.eql(0);",
+											"",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/3",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Voter 3 Undefined Poll",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 404\", function () {",
+											"  pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"VoteDate\" : \"2021-12-29T14:30:28.000Z\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/3/polls/10",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"3",
+										"polls",
+										"10"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Voter 3 Again",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.VoterID).to.eql(\"/voters/3\")",
+											"    pm.expect(responseJson.FirstName).to.eql(\"Jennifer\");",
+											"    pm.expect(responseJson.LastName).to.eql(\"Liu\");",
+											"    pm.expect(responseJson.VoteHistory.length).to.eql(0);",
+											"",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/3",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Undefined Voter Poll 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 404\", function () {",
+											"  pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"VoteDate\" : \"2021-12-29T14:30:28.000Z\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/10/polls/1",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"10",
+										"polls",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Voters",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.length).to.eql(3);",
+											"",
+											"    for (var i = 0; i < responseJson.length; i++) { ",
+											"        if (responseJson[i].VoterID == \"/voters/1\"){",
+											"            pm.expect(responseJson[i].FirstName).to.eql(\"John\");",
+											"            pm.expect(responseJson[i].LastName).to.eql(\"Doe\");",
+											"            pm.expect(responseJson[i].VoteHistory.length).to.eql(2);",
+											"        }",
+											"        if (responseJson[i].VoterID == \"/voters/2\"){",
+											"            pm.expect(responseJson[i].FirstName).to.eql(\"Jane\");",
+											"            pm.expect(responseJson[i].LastName).to.eql(\"Lain\");",
+											"            pm.expect(responseJson[i].VoteHistory.length).to.eql(0);",
+											"        }",
+											"        if (responseJson[i].VoterID == \"/voters/3\"){",
+											"            pm.expect(responseJson[i].FirstName).to.eql(\"Jennifer\");",
+											"            pm.expect(responseJson[i].LastName).to.eql(\"Liu\");",
+											"            pm.expect(responseJson[i].VoteHistory.length).to.eql(0);",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Delete Voter",
+					"item": [
+						{
+							"name": "Delete Voter 3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/3",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Voters",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.length).to.eql(2);",
+											"",
+											"    for (var i = 0; i < responseJson.length; i++) { ",
+											"        if (responseJson[i].VoterID == \"/voters/1\"){",
+											"            pm.expect(responseJson[i].FirstName).to.eql(\"John\");",
+											"            pm.expect(responseJson[i].LastName).to.eql(\"Doe\");",
+											"            pm.expect(responseJson[i].VoteHistory.length).to.eql(2);",
+											"        }",
+											"        if (responseJson[i].VoterID == \"/voters/2\"){",
+											"            pm.expect(responseJson[i].FirstName).to.eql(\"Jane\");",
+											"            pm.expect(responseJson[i].LastName).to.eql(\"Lain\");",
+											"            pm.expect(responseJson[i].VoteHistory.length).to.eql(0);",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Undefined Voter",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 404\", function () {",
+											"  pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/10",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"10"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Poll",
+			"item": [
+				{
+					"name": "Get All Polls",
+					"item": [
+						{
+							"name": "Get All Polls",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.length).to.eql(2);",
+											"",
+											"    for (var i = 0; i < responseJson.length; i++) { ",
+											"        if (responseJson[i].PollID == \"/polls/1\"){",
+											"            pm.expect(responseJson[i].PollTitle).to.eql(\"Poll 1: Cats or Dogs?\");",
+											"            pm.expect(responseJson[i].PollQuestion).to.eql(\"Do you prefer cats or dogs?\");",
+											"            pm.expect(responseJson[i].PollOptions.length).to.eql(2);",
+											"        }",
+											"        if (responseJson[i].PollID == \"/polls/2\"){",
+											"            pm.expect(responseJson[i].PollTitle).to.eql(\"Poll 2: Favorite Season\");",
+											"            pm.expect(responseJson[i].PollQuestion).to.eql(\"What is your favorite season?\");",
+											"            pm.expect(responseJson[i].PollOptions.length).to.eql(4);",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get Poll",
+					"item": [
+						{
+							"name": "Get Poll 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.PollID).to.eql(\"/polls/1\");",
+											"    pm.expect(responseJson.PollTitle).to.eql(\"Poll 1: Cats or Dogs?\");",
+											"    pm.expect(responseJson.PollQuestion).to.eql(\"Do you prefer cats or dogs?\");",
+											"    pm.expect(responseJson.PollOptions.length).to.eql(2);",
+											"",
+											"    for (var i = 0; i < responseJson.PollOptions.length; i++) { ",
+											"        if (responseJson.PollOptions[i].PollOptionID == \"/polls/1/options/1\"){",
+											"            pm.expect(responseJson.PollOptions[i].PollOptionText).to.eql(\"Cats\");",
+											"        }",
+											"        if (responseJson.PollOptions[i].PollOptionID == \"/polls/1/options/2\"){",
+											"            pm.expect(responseJson.PollOptions[i].PollOptionText).to.eql(\"Dogs\");",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls/1",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Poll 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.PollID).to.eql(\"/polls/2\");",
+											"    pm.expect(responseJson.PollTitle).to.eql(\"Poll 2: Favorite Season\");",
+											"    pm.expect(responseJson.PollQuestion).to.eql(\"What is your favorite season?\");",
+											"    pm.expect(responseJson.PollOptions.length).to.eql(4);",
+											"",
+											"    for (var i = 0; i < responseJson.PollOptions.length; i++) { ",
+											"        if (responseJson.PollOptions[i].PollOptionID == \"/polls/2/options/1\"){",
+											"            pm.expect(responseJson.PollOptions[i].PollOptionText).to.eql(\"Summer\");",
+											"        }",
+											"        if (responseJson.PollOptions[i].PollOptionID == \"/polls/2/options/2\"){",
+											"            pm.expect(responseJson.PollOptions[i].PollOptionText).to.eql(\"Fall\");",
+											"        }",
+											"        if (responseJson.PollOptions[i].PollOptionID == \"/polls/2/options/3\"){",
+											"            pm.expect(responseJson.PollOptions[i].PollOptionText).to.eql(\"Winter\");",
+											"        }",
+											"        if (responseJson.PollOptions[i].PollOptionID == \"/polls/2/options/4\"){",
+											"            pm.expect(responseJson.PollOptions[i].PollOptionText).to.eql(\"Spring\");",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls/2",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Undefined Poll",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 404\", function () {",
+											"  pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls/10",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls",
+										"10"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Add Poll",
+					"item": [
+						{
+							"name": "Add Poll With Existing ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 500\", function () {",
+											"  pm.response.to.have.status(500);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"PollTitle\": \"Poll 1: Pancakes or Waffles?\",\n    \"PollQuestion\" : \"Do you prefer pancakes, waffles, or neither?\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls/1",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Poll 3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"PollTitle\": \"Poll 3: Pancakes or Waffles?\",\n    \"PollQuestion\" : \"Do you prefer pancakes, waffles, or neither?\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls/3",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Polls",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.length).to.eql(3);",
+											"",
+											"    for (var i = 0; i < responseJson.length; i++) { ",
+											"        if (responseJson[i].PollID == \"/polls/1\"){",
+											"            pm.expect(responseJson[i].PollTitle).to.eql(\"Poll 1: Cats or Dogs?\");",
+											"            pm.expect(responseJson[i].PollQuestion).to.eql(\"Do you prefer cats or dogs?\");",
+											"            pm.expect(responseJson[i].PollOptions.length).to.eql(2);",
+											"        }",
+											"        if (responseJson[i].PollID == \"/polls/2\"){",
+											"            pm.expect(responseJson[i].PollTitle).to.eql(\"Poll 2: Favorite Season\");",
+											"            pm.expect(responseJson[i].PollQuestion).to.eql(\"What is your favorite season?\");",
+											"            pm.expect(responseJson[i].PollOptions.length).to.eql(4);",
+											"        }",
+											"",
+											"        if (responseJson[i].PollID == \"/polls/3\"){",
+											"            pm.expect(responseJson[i].PollTitle).to.eql(\"Poll 3: Pancakes or Waffles?\");",
+											"            pm.expect(responseJson[i].PollQuestion).to.eql(\"Do you prefer pancakes, waffles, or neither?\");",
+											"            pm.expect(responseJson[i].PollOptions.length).to.eql(0);",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get Poll Options",
+					"item": [
+						{
+							"name": "Get Poll Options for Poll 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.length).to.eql(4);",
+											"",
+											"    for (var i = 0; i < responseJson.length; i++) { ",
+											"        if (responseJson[i].PollOptionID == \"/polls/2/options/1\"){",
+											"            pm.expect(responseJson[i].PollOptionText).to.eql(\"Summer\");",
+											"        }",
+											"        if (responseJson[i].PollOptionID == \"/polls/2/options/2\"){",
+											"            pm.expect(responseJson[i].PollOptionText).to.eql(\"Fall\");",
+											"        }",
+											"        if (responseJson[i].PollOptionID == \"/polls/2/options/3\"){",
+											"            pm.expect(responseJson[i].PollOptionText).to.eql(\"Winter\");",
+											"        }",
+											"        if (responseJson[i].PollOptionID == \"/polls/2/options/4\"){",
+											"            pm.expect(responseJson[i].PollOptionText).to.eql(\"Spring\");",
+											"        }",
+											"",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls/2/options",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls",
+										"2",
+										"options"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Poll Options for Undefined Poll",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls/10/options",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls",
+										"10",
+										"options"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get Poll Option",
+					"item": [
+						{
+							"name": "Get Poll 1 Option 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.PollOptionID).to.eql(\"/polls/1/options/1\");",
+											"    pm.expect(responseJson.PollOptionText).to.eql(\"Cats\");",
+											"",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls/1/options/1",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls",
+										"1",
+										"options",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Undefined Poll Option 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 404\", function () {",
+											"  pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls/10/options/1",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls",
+										"10",
+										"options",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Poll 1 Undefined Option",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 404\", function () {",
+											"  pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls/1/options/10",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls",
+										"1",
+										"options",
+										"10"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Add Poll Option",
+					"item": [
+						{
+							"name": "Add Poll 1 Option 3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"PollOptions\" : [\n        {\"PollOptionText\" : \"Both Equally\"}\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls/1/options/3",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls",
+										"1",
+										"options",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Poll 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.PollID).to.eql(\"/polls/1\");",
+											"    pm.expect(responseJson.PollTitle).to.eql(\"Poll 1: Cats or Dogs?\");",
+											"    pm.expect(responseJson.PollQuestion).to.eql(\"Do you prefer cats or dogs?\");",
+											"    pm.expect(responseJson.PollOptions.length).to.eql(3);",
+											"",
+											"    for (var i = 0; i < responseJson.PollOptions.length; i++) { ",
+											"        if (responseJson.PollOptions[i].PollOptionID == \"/polls/1/options/1\"){",
+											"            pm.expect(responseJson.PollOptions[i].PollOptionText).to.eql(\"Cats\");",
+											"        }",
+											"        if (responseJson.PollOptions[i].PollOptionID == \"/polls/1/options/2\"){",
+											"            pm.expect(responseJson.PollOptions[i].PollOptionText).to.eql(\"Dogs\");",
+											"        }",
+											"        if (responseJson.PollOptions[i].PollOptionID == \"/polls/1/options/3\"){",
+											"            pm.expect(responseJson.PollOptions[i].PollOptionText).to.eql(\"Both Equally\");",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls/1",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Poll 1 With Existing Option ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 500\", function () {",
+											"  pm.response.to.have.status(500);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"PollOptions\" : [\n        {\"PollOptionText\" : \"Zebras\"}\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls/1/options/2",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls",
+										"1",
+										"options",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Poll 1 Again",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.PollID).to.eql(\"/polls/1\");",
+											"    pm.expect(responseJson.PollTitle).to.eql(\"Poll 1: Cats or Dogs?\");",
+											"    pm.expect(responseJson.PollQuestion).to.eql(\"Do you prefer cats or dogs?\");",
+											"    pm.expect(responseJson.PollOptions.length).to.eql(3);",
+											"",
+											"    for (var i = 0; i < responseJson.PollOptions.length; i++) { ",
+											"        if (responseJson.PollOptions[i].PollOptionID == \"/polls/1/options/1\"){",
+											"            pm.expect(responseJson.PollOptions[i].PollOptionText).to.eql(\"Cats\");",
+											"        }",
+											"        if (responseJson.PollOptions[i].PollOptionID == \"/polls/1/options/2\"){",
+											"            pm.expect(responseJson.PollOptions[i].PollOptionText).to.eql(\"Dogs\");",
+											"        }",
+											"        if (responseJson.PollOptions[i].PollOptionID == \"/polls/1/options/3\"){",
+											"            pm.expect(responseJson.PollOptions[i].PollOptionText).to.eql(\"Both Equally\");",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls/1",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Poll Option to Undefined Poll",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 500\", function () {",
+											"  pm.response.to.have.status(500);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"PollOptions\" : [\n        {\"PollOptionText\" : \"Random\"}\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls/10/options/1",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls",
+										"10",
+										"options",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Delete Poll Option",
+					"item": [
+						{
+							"name": "Delete Poll 1 Option 3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls/1/options/3",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls",
+										"1",
+										"options",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Poll 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.PollID).to.eql(\"/polls/1\");",
+											"    pm.expect(responseJson.PollTitle).to.eql(\"Poll 1: Cats or Dogs?\");",
+											"    pm.expect(responseJson.PollQuestion).to.eql(\"Do you prefer cats or dogs?\");",
+											"    pm.expect(responseJson.PollOptions.length).to.eql(2);",
+											"",
+											"    for (var i = 0; i < responseJson.PollOptions.length; i++) { ",
+											"        if (responseJson.PollOptions[i].PollOptionID == \"/polls/1/options/1\"){",
+											"            pm.expect(responseJson.PollOptions[i].PollOptionText).to.eql(\"Cats\");",
+											"        }",
+											"        if (responseJson.PollOptions[i].PollOptionID == \"/polls/1/options/2\"){",
+											"            pm.expect(responseJson.PollOptions[i].PollOptionText).to.eql(\"Dogs\");",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls/1",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Undefined Poll Option 3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 404\", function () {",
+											"  pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls/10/options/3",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls",
+										"10",
+										"options",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Poll 1 Undefined Option",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 404\", function () {",
+											"  pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls/1/options/10",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls",
+										"1",
+										"options",
+										"10"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Delete Poll",
+					"item": [
+						{
+							"name": "Delete Poll 3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls/3",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Polls",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.length).to.eql(2);",
+											"",
+											"    for (var i = 0; i < responseJson.length; i++) { ",
+											"        if (responseJson[i].PollID == \"/polls/1\"){",
+											"            pm.expect(responseJson[i].PollTitle).to.eql(\"Poll 1: Cats or Dogs?\");",
+											"            pm.expect(responseJson[i].PollQuestion).to.eql(\"Do you prefer cats or dogs?\");",
+											"            pm.expect(responseJson[i].PollOptions.length).to.eql(2);",
+											"        }",
+											"        if (responseJson[i].PollID == \"/polls/2\"){",
+											"            pm.expect(responseJson[i].PollTitle).to.eql(\"Poll 2: Favorite Season\");",
+											"            pm.expect(responseJson[i].PollQuestion).to.eql(\"What is your favorite season?\");",
+											"            pm.expect(responseJson[i].PollOptions.length).to.eql(4);",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Undefined Poll",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 404\", function () {",
+											"  pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{poll_port}}/polls/10",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{poll_port}}",
+									"path": [
+										"polls",
+										"10"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Votes",
+			"item": [
+				{
+					"name": "Get All Votes",
+					"item": [
+						{
+							"name": "Get All Votes",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.length).to.eql(2);",
+											"",
+											"    for (var i = 0; i < responseJson.length; i++) { ",
+											"        if (responseJson[i].VoteID == \"/votes/1\"){",
+											"            pm.expect(responseJson[i].VoterID).to.eql(\"/voters/1\");",
+											"            pm.expect(responseJson[i].PollID).to.eql(\"/polls/1\");",
+											"            pm.expect(responseJson[i].VoteValue).to.eql(\"/polls/1/options/2\");",
+											"        }",
+											"        if (responseJson[i].VoteID == \"/votes/2\"){",
+											"            pm.expect(responseJson[i].VoterID).to.eql(\"/voters/1\");",
+											"            pm.expect(responseJson[i].PollID).to.eql(\"/polls/2\");",
+											"            pm.expect(responseJson[i].VoteValue).to.eql(\"/polls/2/options/1\");",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{votes_port}}/votes",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{votes_port}}",
+									"path": [
+										"votes"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get Vote",
+					"item": [
+						{
+							"name": "Get Vote 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.VoteID).to.eql(\"/votes/1\");",
+											"    pm.expect(responseJson.VoterID).to.eql(\"/voters/1\");",
+											"    pm.expect(responseJson.PollID).to.eql(\"/polls/1\");",
+											"    pm.expect(responseJson.VoteValue).to.eql(\"/polls/1/options/2\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{votes_port}}/votes/1",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{votes_port}}",
+									"path": [
+										"votes",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Undefined Vote",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 404\", function () {",
+											"  pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{votes_port}}/votes/10",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{votes_port}}",
+									"path": [
+										"votes",
+										"10"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Add Vote",
+					"item": [
+						{
+							"name": "Add Vote 3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"VoterID\" : \"/voters/2\",\n    \"PollID\" : \"/polls/1\",\n    \"VoteValue\" : \"/polls/1/options/1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{votes_port}}/votes/3",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{votes_port}}",
+									"path": [
+										"votes",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Vote 3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.VoteID).to.eql(\"/votes/3\");",
+											"    pm.expect(responseJson.VoterID).to.eql(\"/voters/2\");",
+											"    pm.expect(responseJson.PollID).to.eql(\"/polls/1\");",
+											"    pm.expect(responseJson.VoteValue).to.eql(\"/polls/1/options/1\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{votes_port}}/votes/3",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{votes_port}}",
+									"path": [
+										"votes",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Votes",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.length).to.eql(3);",
+											"",
+											"    for (var i = 0; i < responseJson.length; i++) { ",
+											"        if (responseJson[i].VoteID == \"/votes/1\"){",
+											"            pm.expect(responseJson[i].VoterID).to.eql(\"/voters/1\");",
+											"            pm.expect(responseJson[i].PollID).to.eql(\"/polls/1\");",
+											"            pm.expect(responseJson[i].VoteValue).to.eql(\"/polls/1/options/2\");",
+											"        }",
+											"        if (responseJson[i].VoteID == \"/votes/2\"){",
+											"            pm.expect(responseJson[i].VoterID).to.eql(\"/voters/1\");",
+											"            pm.expect(responseJson[i].PollID).to.eql(\"/polls/2\");",
+											"            pm.expect(responseJson[i].VoteValue).to.eql(\"/polls/2/options/1\");",
+											"        }",
+											"        if (responseJson[i].VoteID == \"/votes/3\"){",
+											"            pm.expect(responseJson[i].VoterID).to.eql(\"/voters/2\");",
+											"            pm.expect(responseJson[i].PollID).to.eql(\"/polls/1\");",
+											"            pm.expect(responseJson[i].VoteValue).to.eql(\"/polls/1/options/1\");",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{votes_port}}/votes",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{votes_port}}",
+									"path": [
+										"votes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Voter 2 Polls 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.PollID).to.eql(\"/polls/1\");",
+											"    pm.expect(responseJson.VoteDate.length).to.not.eql(0);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/2/polls/1",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"2",
+										"polls",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Existing Vote 3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 500\", function () {",
+											"  pm.response.to.have.status(500);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"VoterID\" : \"/voters/2\",\n    \"PollID\" : \"/polls/1\",\n    \"VoteValue\" : \"/polls/1/options/1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{votes_port}}/votes/3",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{votes_port}}",
+									"path": [
+										"votes",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Vote 4 Undefined Voter",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 404\", function () {",
+											"  pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"VoterID\" : \"/voters/10\",\n    \"PollID\" : \"/polls/1\",\n    \"VoteValue\" : \"/polls/1/options/1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{votes_port}}/votes/4",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{votes_port}}",
+									"path": [
+										"votes",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Vote 4 Undefined Poll",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 404\", function () {",
+											"  pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"VoterID\" : \"/voters/2\",\n    \"PollID\" : \"/polls/10\",\n    \"VoteValue\" : \"/polls/10/options/1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{votes_port}}/votes/4",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{votes_port}}",
+									"path": [
+										"votes",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Vote 4 Undefined PollOption",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 404\", function () {",
+											"  pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"VoterID\" : \"/voters/2\",\n    \"PollID\" : \"/polls/3\",\n    \"VoteValue\" : \"/polls/3/options/10\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{votes_port}}/votes/4",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{votes_port}}",
+									"path": [
+										"votes",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Votes Again",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.length).to.eql(3);",
+											"",
+											"    for (var i = 0; i < responseJson.length; i++) { ",
+											"        if (responseJson[i].VoteID == \"/votes/1\"){",
+											"            pm.expect(responseJson[i].VoterID).to.eql(\"/voters/1\");",
+											"            pm.expect(responseJson[i].PollID).to.eql(\"/polls/1\");",
+											"            pm.expect(responseJson[i].VoteValue).to.eql(\"/polls/1/options/2\");",
+											"        }",
+											"        if (responseJson[i].VoteID == \"/votes/2\"){",
+											"            pm.expect(responseJson[i].VoterID).to.eql(\"/voters/1\");",
+											"            pm.expect(responseJson[i].PollID).to.eql(\"/polls/2\");",
+											"            pm.expect(responseJson[i].VoteValue).to.eql(\"/polls/2/options/1\");",
+											"        }",
+											"        if (responseJson[i].VoteID == \"/votes/3\"){",
+											"            pm.expect(responseJson[i].VoterID).to.eql(\"/voters/2\");",
+											"            pm.expect(responseJson[i].PollID).to.eql(\"/polls/1\");",
+											"            pm.expect(responseJson[i].VoteValue).to.eql(\"/polls/1/options/1\");",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{votes_port}}/votes",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{votes_port}}",
+									"path": [
+										"votes"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Update Vote",
+					"item": [
+						{
+							"name": "Update Vote 3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"VoteValue\" : \"/polls/1/options/2\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{votes_port}}/votes/3",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{votes_port}}",
+									"path": [
+										"votes",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Vote 3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.VoteID).to.eql(\"/votes/3\");",
+											"    pm.expect(responseJson.VoterID).to.eql(\"/voters/2\");",
+											"    pm.expect(responseJson.PollID).to.eql(\"/polls/1\");",
+											"    pm.expect(responseJson.VoteValue).to.eql(\"/polls/1/options/2\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{votes_port}}/votes/3",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{votes_port}}",
+									"path": [
+										"votes",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Votes",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.length).to.eql(3);",
+											"",
+											"    for (var i = 0; i < responseJson.length; i++) { ",
+											"        if (responseJson[i].VoteID == \"/votes/1\"){",
+											"            pm.expect(responseJson[i].VoterID).to.eql(\"/voters/1\");",
+											"            pm.expect(responseJson[i].PollID).to.eql(\"/polls/1\");",
+											"            pm.expect(responseJson[i].VoteValue).to.eql(\"/polls/1/options/2\");",
+											"        }",
+											"        if (responseJson[i].VoteID == \"/votes/2\"){",
+											"            pm.expect(responseJson[i].VoterID).to.eql(\"/voters/1\");",
+											"            pm.expect(responseJson[i].PollID).to.eql(\"/polls/2\");",
+											"            pm.expect(responseJson[i].VoteValue).to.eql(\"/polls/2/options/1\");",
+											"        }",
+											"        if (responseJson[i].VoteID == \"/votes/3\"){",
+											"            pm.expect(responseJson[i].VoterID).to.eql(\"/voters/2\");",
+											"            pm.expect(responseJson[i].PollID).to.eql(\"/polls/1\");",
+											"            pm.expect(responseJson[i].VoteValue).to.eql(\"/polls/1/options/2\");",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{votes_port}}/votes",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{votes_port}}",
+									"path": [
+										"votes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Voter 2 Polls 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.PollID).to.eql(\"/polls/1\");",
+											"    pm.expect(responseJson.VoteDate.length).to.not.eql(0);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/2/polls/1",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"2",
+										"polls",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Vote 3 No VoteValue",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 400\", function () {",
+											"  pm.response.to.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{votes_port}}/votes/3",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{votes_port}}",
+									"path": [
+										"votes",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Vote 3 Undefined VoteValue",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 404\", function () {",
+											"  pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"VoteValue\" : \"/polls/1/options/10\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{votes_port}}/votes/3",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{votes_port}}",
+									"path": [
+										"votes",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Vote 3 Again",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"VoteValue\" : \"/polls/1/options/1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{hostname}}:{{votes_port}}/votes/3",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{votes_port}}",
+									"path": [
+										"votes",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Votes Again",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.length).to.eql(3);",
+											"",
+											"    for (var i = 0; i < responseJson.length; i++) { ",
+											"        if (responseJson[i].VoteID == \"/votes/1\"){",
+											"            pm.expect(responseJson[i].VoterID).to.eql(\"/voters/1\");",
+											"            pm.expect(responseJson[i].PollID).to.eql(\"/polls/1\");",
+											"            pm.expect(responseJson[i].VoteValue).to.eql(\"/polls/1/options/2\");",
+											"        }",
+											"        if (responseJson[i].VoteID == \"/votes/2\"){",
+											"            pm.expect(responseJson[i].VoterID).to.eql(\"/voters/1\");",
+											"            pm.expect(responseJson[i].PollID).to.eql(\"/polls/2\");",
+											"            pm.expect(responseJson[i].VoteValue).to.eql(\"/polls/2/options/1\");",
+											"        }",
+											"        if (responseJson[i].VoteID == \"/votes/3\"){",
+											"            pm.expect(responseJson[i].VoterID).to.eql(\"/voters/2\");",
+											"            pm.expect(responseJson[i].PollID).to.eql(\"/polls/1\");",
+											"            pm.expect(responseJson[i].VoteValue).to.eql(\"/polls/1/options/1\");",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{votes_port}}/votes",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{votes_port}}",
+									"path": [
+										"votes"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Delete Vote",
+					"item": [
+						{
+							"name": "Delete Vote 3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{votes_port}}/votes/3",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{votes_port}}",
+									"path": [
+										"votes",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Votes",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"The response JSON has expected data.\", () => {",
+											"    const responseJson = pm.response.json();",
+											"",
+											"    pm.expect(responseJson.length).to.eql(2);",
+											"",
+											"    for (var i = 0; i < responseJson.length; i++) { ",
+											"        if (responseJson[i].VoteID == \"/votes/1\"){",
+											"            pm.expect(responseJson[i].VoterID).to.eql(\"/voters/1\");",
+											"            pm.expect(responseJson[i].PollID).to.eql(\"/polls/1\");",
+											"            pm.expect(responseJson[i].VoteValue).to.eql(\"/polls/1/options/2\");",
+											"        }",
+											"        if (responseJson[i].VoteID == \"/votes/2\"){",
+											"            pm.expect(responseJson[i].VoterID).to.eql(\"/voters/1\");",
+											"            pm.expect(responseJson[i].PollID).to.eql(\"/polls/2\");",
+											"            pm.expect(responseJson[i].VoteValue).to.eql(\"/polls/2/options/1\");",
+											"        }",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{votes_port}}/votes",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{votes_port}}",
+									"path": [
+										"votes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Voter 2 Polls 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 404\", function () {",
+											"  pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{voter_port}}/voters/2/polls/1",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{voter_port}}",
+									"path": [
+										"voters",
+										"2",
+										"polls",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Undefined Vote",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status Code 200\", function () {",
+											"  pm.response.to.have.status(404);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://{{hostname}}:{{votes_port}}/votes/10",
+									"protocol": "http",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{votes_port}}",
+									"path": [
+										"votes",
+										"10"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Relay Getters",
+					"item": [
+						{
+							"name": "Get All Polls",
+							"item": [
+								{
+									"name": "Get All Polls",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status Code 200\", function () {",
+													"  pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"The response JSON has expected data.\", () => {",
+													"    const responseJson = pm.response.json();",
+													"",
+													"    pm.expect(responseJson.length).to.eql(2);",
+													"",
+													"    for (var i = 0; i < responseJson.length; i++) { ",
+													"        if (responseJson[i].PollID == \"/polls/1\"){",
+													"            pm.expect(responseJson[i].PollTitle).to.eql(\"Poll 1: Cats or Dogs?\");",
+													"            pm.expect(responseJson[i].PollQuestion).to.eql(\"Do you prefer cats or dogs?\");",
+													"            pm.expect(responseJson[i].PollOptions.length).to.eql(2);",
+													"        }",
+													"        if (responseJson[i].PollID == \"/polls/2\"){",
+													"            pm.expect(responseJson[i].PollTitle).to.eql(\"Poll 2: Favorite Season\");",
+													"            pm.expect(responseJson[i].PollQuestion).to.eql(\"What is your favorite season?\");",
+													"            pm.expect(responseJson[i].PollOptions.length).to.eql(4);",
+													"        }",
+													"    }",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{hostname}}:{{votes_port}}/votes/polls",
+											"protocol": "http",
+											"host": [
+												"{{hostname}}"
+											],
+											"port": "{{votes_port}}",
+											"path": [
+												"votes",
+												"polls"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Get Poll",
+							"item": [
+								{
+									"name": "Get Poll 1",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status Code 200\", function () {",
+													"  pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"The response JSON has expected data.\", () => {",
+													"    const responseJson = pm.response.json();",
+													"",
+													"    pm.expect(responseJson.PollID).to.eql(\"/polls/1\");",
+													"    pm.expect(responseJson.PollTitle).to.eql(\"Poll 1: Cats or Dogs?\");",
+													"    pm.expect(responseJson.PollQuestion).to.eql(\"Do you prefer cats or dogs?\");",
+													"    pm.expect(responseJson.PollOptions.length).to.eql(2);",
+													"",
+													"    for (var i = 0; i < responseJson.PollOptions.length; i++) { ",
+													"        if (responseJson.PollOptions[i].PollOptionID == \"/polls/1/options/1\"){",
+													"            pm.expect(responseJson.PollOptions[i].PollOptionText).to.eql(\"Cats\");",
+													"        }",
+													"        if (responseJson.PollOptions[i].PollOptionID == \"/polls/1/options/2\"){",
+													"            pm.expect(responseJson.PollOptions[i].PollOptionText).to.eql(\"Dogs\");",
+													"        }",
+													"    }",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{hostname}}:{{votes_port}}/votes/polls/1",
+											"protocol": "http",
+											"host": [
+												"{{hostname}}"
+											],
+											"port": "{{votes_port}}",
+											"path": [
+												"votes",
+												"polls",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Poll 2",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status Code 200\", function () {",
+													"  pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"The response JSON has expected data.\", () => {",
+													"    const responseJson = pm.response.json();",
+													"",
+													"    pm.expect(responseJson.PollID).to.eql(\"/polls/2\");",
+													"    pm.expect(responseJson.PollTitle).to.eql(\"Poll 2: Favorite Season\");",
+													"    pm.expect(responseJson.PollQuestion).to.eql(\"What is your favorite season?\");",
+													"    pm.expect(responseJson.PollOptions.length).to.eql(4);",
+													"",
+													"    for (var i = 0; i < responseJson.PollOptions.length; i++) { ",
+													"        if (responseJson.PollOptions[i].PollOptionID == \"/polls/2/options/1\"){",
+													"            pm.expect(responseJson.PollOptions[i].PollOptionText).to.eql(\"Summer\");",
+													"        }",
+													"        if (responseJson.PollOptions[i].PollOptionID == \"/polls/2/options/2\"){",
+													"            pm.expect(responseJson.PollOptions[i].PollOptionText).to.eql(\"Fall\");",
+													"        }",
+													"        if (responseJson.PollOptions[i].PollOptionID == \"/polls/2/options/3\"){",
+													"            pm.expect(responseJson.PollOptions[i].PollOptionText).to.eql(\"Winter\");",
+													"        }",
+													"        if (responseJson.PollOptions[i].PollOptionID == \"/polls/2/options/4\"){",
+													"            pm.expect(responseJson.PollOptions[i].PollOptionText).to.eql(\"Spring\");",
+													"        }",
+													"    }",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{hostname}}:{{votes_port}}/votes/polls/2",
+											"protocol": "http",
+											"host": [
+												"{{hostname}}"
+											],
+											"port": "{{votes_port}}",
+											"path": [
+												"votes",
+												"polls",
+												"2"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Undefined Poll",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status Code 404\", function () {",
+													"  pm.response.to.have.status(404);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{hostname}}:{{votes_port}}/votes/polls/10",
+											"protocol": "http",
+											"host": [
+												"{{hostname}}"
+											],
+											"port": "{{votes_port}}",
+											"path": [
+												"votes",
+												"polls",
+												"10"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Get Poll Options",
+							"item": [
+								{
+									"name": "Get Poll Options for Poll 2",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status Code 200\", function () {",
+													"  pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"The response JSON has expected data.\", () => {",
+													"    const responseJson = pm.response.json();",
+													"",
+													"    pm.expect(responseJson.length).to.eql(4);",
+													"",
+													"    for (var i = 0; i < responseJson.length; i++) { ",
+													"        if (responseJson[i].PollOptionID == \"/polls/2/options/1\"){",
+													"            pm.expect(responseJson[i].PollOptionText).to.eql(\"Summer\");",
+													"        }",
+													"        if (responseJson[i].PollOptionID == \"/polls/2/options/2\"){",
+													"            pm.expect(responseJson[i].PollOptionText).to.eql(\"Fall\");",
+													"        }",
+													"        if (responseJson[i].PollOptionID == \"/polls/2/options/3\"){",
+													"            pm.expect(responseJson[i].PollOptionText).to.eql(\"Winter\");",
+													"        }",
+													"        if (responseJson[i].PollOptionID == \"/polls/2/options/4\"){",
+													"            pm.expect(responseJson[i].PollOptionText).to.eql(\"Spring\");",
+													"        }",
+													"",
+													"    }",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{hostname}}:{{votes_port}}/votes/polls/2/options",
+											"protocol": "http",
+											"host": [
+												"{{hostname}}"
+											],
+											"port": "{{votes_port}}",
+											"path": [
+												"votes",
+												"polls",
+												"2",
+												"options"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Poll Options for Undefined Poll",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status Code 200\", function () {",
+													"  pm.response.to.have.status(404);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{hostname}}:{{votes_port}}/votes/polls/10/options",
+											"protocol": "http",
+											"host": [
+												"{{hostname}}"
+											],
+											"port": "{{votes_port}}",
+											"path": [
+												"votes",
+												"polls",
+												"10",
+												"options"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Get Poll Option",
+							"item": [
+								{
+									"name": "Get Poll 1 Option 1",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status Code 200\", function () {",
+													"  pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"The response JSON has expected data.\", () => {",
+													"",
+													"    const responseJson = pm.response.json();",
+													"",
+													"    pm.expect(responseJson.PollOptionID).to.eql(\"/polls/1/options/1\");",
+													"    pm.expect(responseJson.PollOptionText).to.eql(\"Cats\");",
+													"",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{hostname}}:{{votes_port}}/votes/polls/1/options/1",
+											"protocol": "http",
+											"host": [
+												"{{hostname}}"
+											],
+											"port": "{{votes_port}}",
+											"path": [
+												"votes",
+												"polls",
+												"1",
+												"options",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Undefined Poll Option 1",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status Code 404\", function () {",
+													"  pm.response.to.have.status(404);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{hostname}}:{{votes_port}}/votes/polls/10/options/1",
+											"protocol": "http",
+											"host": [
+												"{{hostname}}"
+											],
+											"port": "{{votes_port}}",
+											"path": [
+												"votes",
+												"polls",
+												"10",
+												"options",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Poll 1 Undefined Option",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status Code 404\", function () {",
+													"  pm.response.to.have.status(404);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{hostname}}:{{votes_port}}/votes/polls/1/options/10",
+											"protocol": "http",
+											"host": [
+												"{{hostname}}"
+											],
+											"port": "{{votes_port}}",
+											"path": [
+												"votes",
+												"polls",
+												"1",
+												"options",
+												"10"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Get All Voters",
+							"item": [
+								{
+									"name": "Get All Voters",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status Code 200\", function () {",
+													"  pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"The response JSON has expected data.\", () => {",
+													"    const responseJson = pm.response.json();",
+													"",
+													"    pm.expect(responseJson.length).to.eql(2);",
+													"",
+													"    for (var i = 0; i < responseJson.length; i++) { ",
+													"        if (responseJson[i].VoterID == \"/voters/1\"){",
+													"            pm.expect(responseJson[i].FirstName).to.eql(\"John\");",
+													"            pm.expect(responseJson[i].LastName).to.eql(\"Doe\");",
+													"            pm.expect(responseJson[i].VoteHistory.length).to.eql(2);",
+													"        }",
+													"        if (responseJson[i].VoterID == \"/voters/2\"){",
+													"            pm.expect(responseJson[i].FirstName).to.eql(\"Jane\");",
+													"            pm.expect(responseJson[i].LastName).to.eql(\"Lain\");",
+													"            pm.expect(responseJson[i].VoteHistory.length).to.eql(0);",
+													"        }",
+													"    }",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{hostname}}:{{votes_port}}/votes/voters",
+											"protocol": "http",
+											"host": [
+												"{{hostname}}"
+											],
+											"port": "{{votes_port}}",
+											"path": [
+												"votes",
+												"voters"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Get Voter",
+							"item": [
+								{
+									"name": "Get Voter 1",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status Code 200\", function () {",
+													"  pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"The response JSON has expected data.\", () => {",
+													"    const responseJson = pm.response.json();",
+													"",
+													"    pm.expect(responseJson.VoterID).to.eql(\"/voters/1\")",
+													"    pm.expect(responseJson.FirstName).to.eql(\"John\");",
+													"    pm.expect(responseJson.LastName).to.eql(\"Doe\");",
+													"    pm.expect(responseJson.VoteHistory.length).to.eql(2);",
+													"",
+													"    for (var i = 0; i < responseJson.VoteHistory.length; i++) { ",
+													"        if (responseJson.VoteHistory[i].PollID == \"/polls/1\"){",
+													"            pm.expect(responseJson.VoteHistory[i].VoteDate.length).to.not.eql(0);",
+													"        }",
+													"        if (responseJson.VoteHistory[i].PollID == \"/polls/2\"){",
+													"            pm.expect(responseJson.VoteHistory[i].VoteDate.length).to.not.eql(0);",
+													"        }",
+													"    }",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{hostname}}:{{votes_port}}/votes/voters/1",
+											"protocol": "http",
+											"host": [
+												"{{hostname}}"
+											],
+											"port": "{{votes_port}}",
+											"path": [
+												"votes",
+												"voters",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Undefined Voter",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status Code 404\", function () {",
+													"  pm.response.to.have.status(404);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{hostname}}:{{votes_port}}/votes/voters/10",
+											"protocol": "http",
+											"host": [
+												"{{hostname}}"
+											],
+											"port": "{{votes_port}}",
+											"path": [
+												"votes",
+												"voters",
+												"10"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Get VoteHistory",
+							"item": [
+								{
+									"name": "Get Voter 1 VoteHistory",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status Code 200\", function () {",
+													"  pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"The response JSON has expected data.\", () => {",
+													"    const responseJson = pm.response.json();",
+													"",
+													"    pm.expect(responseJson.length).to.eql(2);",
+													"",
+													"    for (var i = 0; i < responseJson.length; i++) { ",
+													"        if (responseJson[i].PollID == \"/polls/1\"){",
+													"            pm.expect(responseJson[i].VoteDate.length).to.not.eql(0);",
+													"        }",
+													"        if (responseJson[i].PollID == \"/voters/2\"){",
+													"            pm.expect(responseJson[i].VoteDate.length).to.not.eql(0);",
+													"        }",
+													"    }",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{hostname}}:{{votes_port}}/votes/voters/1/polls",
+											"protocol": "http",
+											"host": [
+												"{{hostname}}"
+											],
+											"port": "{{votes_port}}",
+											"path": [
+												"votes",
+												"voters",
+												"1",
+												"polls"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Undefined Voter VoteHistory",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status Code 404\", function () {",
+													"  pm.response.to.have.status(404);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{hostname}}:{{votes_port}}/votes/voters/10/polls",
+											"protocol": "http",
+											"host": [
+												"{{hostname}}"
+											],
+											"port": "{{votes_port}}",
+											"path": [
+												"votes",
+												"voters",
+												"10",
+												"polls"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Get VoterPoll",
+							"item": [
+								{
+									"name": "Get Voter 1 Poll 1",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status Code 200\", function () {",
+													"  pm.response.to.have.status(200);",
+													"});",
+													"",
+													"pm.test(\"The response JSON has expected data.\", () => {",
+													"    const responseJson = pm.response.json();",
+													"",
+													"    pm.expect(responseJson.PollID).to.eql(\"/polls/1\");",
+													"    pm.expect(responseJson.VoteDate.length).to.not.eql(0);",
+													"",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{hostname}}:{{votes_port}}/votes/voters/1/polls/1",
+											"protocol": "http",
+											"host": [
+												"{{hostname}}"
+											],
+											"port": "{{votes_port}}",
+											"path": [
+												"votes",
+												"voters",
+												"1",
+												"polls",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Undefined Voter VoterPoll 1",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status Code 404\", function () {",
+													"  pm.response.to.have.status(404);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{hostname}}:{{votes_port}}/votes/voters/10/options/1",
+											"protocol": "http",
+											"host": [
+												"{{hostname}}"
+											],
+											"port": "{{votes_port}}",
+											"path": [
+												"votes",
+												"voters",
+												"10",
+												"options",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Voter 1 Undefined VoterPoll",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status Code 404\", function () {",
+													"  pm.response.to.have.status(404);",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://{{hostname}}:{{votes_port}}/votes/voters/1/polls/10",
+											"protocol": "http",
+											"host": [
+												"{{hostname}}"
+											],
+											"port": "{{votes_port}}",
+											"path": [
+												"votes",
+												"voters",
+												"1",
+												"polls",
+												"10"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Delete Data",
+			"item": [
+				{
+					"name": "Delete Vote 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status Code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"VoterID\" : \"/voters/1\",\n    \"PollID\" : \"/polls/1\",\n    \"VoteValue\" : \"/polls/1/options/2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{votes_port}}/votes/1",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{votes_port}}",
+							"path": [
+								"votes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Vote 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status Code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"VoterID\" : \"/voters/1\",\n    \"PollID\" : \"/polls/2\",\n    \"VoteValue\" : \"/polls/2/options/1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{votes_port}}/votes/2",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{votes_port}}",
+							"path": [
+								"votes",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Poll 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status Code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"PollTitle\": \"Poll 1: Cats or Dogs?\",\n    \"PollQuestion\" : \"Do you prefer cats or dogs?\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{poll_port}}/polls/1",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{poll_port}}",
+							"path": [
+								"polls",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Poll 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status Code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"PollTitle\": \"Poll 2: Favorite Season\",\n    \"PollQuestion\" : \"What is your favorite season?\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{poll_port}}/polls/2",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{poll_port}}",
+							"path": [
+								"polls",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Voter 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status Code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"FirstName\" : \"John\",\n    \"LastName\" : \"Doe\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{voter_port}}/voters/1",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{voter_port}}",
+							"path": [
+								"voters",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Voter 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status Code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"VoterID\": \"/voters/2\",\n    \"FirstName\" : \"Jane\",\n    \"LastName\" : \"Lain\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{hostname}}:{{voter_port}}/voters/2",
+							"protocol": "http",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{voter_port}}",
+							"path": [
+								"voters",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

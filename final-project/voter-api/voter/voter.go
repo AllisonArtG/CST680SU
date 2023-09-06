@@ -6,14 +6,14 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"os"
 	"time"
 
 	"github.com/go-redis/redis/v8"
+	"github.com/go-resty/resty/v2"
 	"github.com/nitishm/go-rejson/v4"
 )
 
-//STRUCTS
+// VOTER STRUCTS
 
 type voterPoll struct {
 	PollID   string
@@ -32,6 +32,27 @@ func NewVoter(voterID string, first string, last string) (*Voter, error) {
 	return &Voter{VoterID: voterID, FirstName: first, LastName: last, VoteHistory: voteHistory}, nil
 }
 
+// Additional STRUCTS
+
+type Poll struct {
+	PollID       string
+	PollTitle    string `json:",omitempty"`
+	PollQuestion string `json:",omitempty"`
+	PollOptions  []pollOption
+}
+
+type pollOption struct {
+	PollOptionID   string
+	PollOptionText string
+}
+
+type Vote struct {
+	VoteID    string
+	VoterID   string
+	PollID    string
+	VoteValue string
+}
+
 const (
 	RedisNilError        = "redis: nil"
 	RedisDefaultLocation = "0.0.0.0:6379"
@@ -45,55 +66,31 @@ type cache struct {
 }
 
 type VoterList struct {
-	//more things would be included in a real implementation
-
-	//Redis cache connections
 	cache
+	votesAPIURL string
+	apiClient   *resty.Client
 }
 
-// New is a constructor function that returns a pointer to a new
-// VoterList struct.  If this is called it uses the default Redis URL
-// with the companion constructor NewWithCacheInstance.
-func New() (*VoterList, error) {
-	//We will use an override if the REDIS_URL is provided as an environment
-	//variable, which is the preferred way to wire up a docker container
-	redisUrl := os.Getenv("VOTERAPI_REDIS_URL")
-	//This handles the default condition
-	if redisUrl == "" {
-		redisUrl = RedisDefaultLocation
-	}
-	return NewWithCacheInstance(redisUrl)
+func New(location string, votesAPIurl string) (*VoterList, error) {
+	return NewWithCacheInstance(location, votesAPIurl)
 }
 
-// NewWithCacheInstance is a constructor function that returns a pointer to a new
-// VoterList struct.  It accepts a string that represents the location of the redis
-// cache.
-func NewWithCacheInstance(location string) (*VoterList, error) {
+func NewWithCacheInstance(location string, votesAPIurl string) (*VoterList, error) {
 
-	//Connect to redis.  Other options can be provided, but the
-	//defaults are OK
+	apiClient := resty.New()
+
 	client := redis.NewClient(&redis.Options{
 		Addr: location,
 	})
 
-	//We use this context to coordinate betwen our go code and
-	//the redis operaitons
 	ctx := context.Background()
 
-	//This is the reccomended way to ensure that our redis connection
-	//is working
 	err := client.Ping(ctx).Err()
 	if err != nil {
 		log.Println("Error connecting to redis" + err.Error())
 		return nil, err
 	}
 
-	//By default, redis manages keys and values, where the values
-	//are either strings, sets, maps, etc.  Redis has an extension
-	//module called ReJSON that allows us to store JSON objects
-	//however, we need a companion library in order to work with it
-	//Below we create an instance of the JSON helper and associate
-	//it with our redis connnection
 	jsonHelper := rejson.NewReJSONHandler()
 	jsonHelper.SetGoRedisClientWithContext(ctx, client)
 
@@ -104,6 +101,8 @@ func NewWithCacheInstance(location string) (*VoterList, error) {
 			jsonHelper:  jsonHelper,
 			context:     ctx,
 		},
+		votesAPIURL: votesAPIurl,
+		apiClient:   apiClient,
 	}, nil
 }
 
@@ -111,33 +110,21 @@ func NewWithCacheInstance(location string) (*VoterList, error) {
 // REDIS HELPERS
 //------------------------------------------------------------
 
-// We will use this later, you can ignore for now
 func isRedisNilError(err error) bool {
 	return errors.Is(err, redis.Nil) || err.Error() == RedisNilError
 }
 
-// In redis, our keys will be strings, they will look like
-// voter:<number>.  This function will take an unsigned integer and
-// return a string that can be used as a key in redis
 func redisKeyFromId(id string) string {
 	return fmt.Sprintf("%s%s", RedisKeyPrefix, id)
 }
 
-// Helper to return a Voter from redis provided a key
 func (vl *VoterList) getItemFromRedis(key string, voter *Voter) error {
 
-	//Lets query redis for the item, note we can return parts of the
-	//json structure, the second parameter "." means return the entire
-	//json structure
 	itemObject, err := vl.jsonHelper.JSONGet(key, ".")
 	if err != nil {
 		return err
 	}
 
-	//JSONGet returns an "any" object, or empty interface,
-	//we need to convert it to a byte array, which is the
-	//underlying type of the object, then we can unmarshal
-	//it into our Voter struct
 	err = json.Unmarshal(itemObject.([]byte), voter)
 	if err != nil {
 		return err
@@ -239,7 +226,7 @@ func (vl *VoterList) AddVoterPoll(voterID, pollID string, newVoter Voter) error 
 	key := redisKeyFromId(voterID)
 	var existingVoter Voter
 	if err := vl.getItemFromRedis(key, &existingVoter); err != nil {
-		return errors.New(fmt.Sprintf("Poll with ID %v does not exist.", voterID))
+		return errors.New(fmt.Sprintf("Voter with ID %v does not exist.", voterID))
 	}
 
 	if len(newVoter.VoteHistory) > 1 || len(newVoter.VoteHistory) == 0 {
@@ -250,11 +237,23 @@ func (vl *VoterList) AddVoterPoll(voterID, pollID string, newVoter Voter) error 
 
 	poll.PollID = pollID
 
+	// Query Votes API to ensure that the Poll exists
+
+	URL := vl.votesAPIURL + "/votes" + poll.PollID
+	var pollTwo Poll
+
+	resp, err := vl.apiClient.R().SetResult(&pollTwo).Get(URL)
+	if err != nil || resp.Status() != "200 OK" {
+		return errors.New(fmt.Sprintf("Could not get Poll %v from Votes API (Poll API)", poll.PollID))
+	}
+
+	// Check if the Poll
+
 	if len(existingVoter.VoteHistory) != 0 {
 		for i := 0; i < len(existingVoter.VoteHistory); i++ {
 			currPoll := existingVoter.VoteHistory[i]
 			if currPoll.PollID == poll.PollID {
-				return errors.New(fmt.Sprintf("Poll with ID %v already exists in Voter %v's VoteHistory.", poll.PollID, voterID))
+				return errors.New(fmt.Sprintf("Poll with ID %v already exists in Voter %v's VoteHistory. Use PUT to update the voterPoll.", poll.PollID, voterID))
 			}
 		}
 	}
@@ -310,33 +309,6 @@ func (vl *VoterList) DeleteVoterPoll(voterID, pollID string) error {
 	}
 }
 
-// updates an existing Voter with the newVoter's fields (FirstName and LastName)
-func (vl *VoterList) UpdateVoter(newVoter Voter) error {
-
-	key := redisKeyFromId(newVoter.VoterID)
-	var existingVoter Voter
-	if err := vl.getItemFromRedis(key, &existingVoter); err != nil {
-		return errors.New(fmt.Sprintf("The voter to be updated Voter %v, does not exist.", newVoter.VoterID))
-	}
-
-	// Only updates the included Voter fields, and leaves not included ones unchanged
-	if newVoter.FirstName != "" {
-		existingVoter.FirstName = newVoter.FirstName
-	}
-	if newVoter.LastName != "" {
-		existingVoter.LastName = newVoter.LastName
-	}
-
-	//Add item to database with JSON Set.  Note there is no update
-	//functionality, so we just overwrite the existing item
-	if _, err := vl.jsonHelper.JSONSet(key, ".", existingVoter); err != nil {
-		return err
-	}
-
-	//If everything is ok, return nil for the error
-	return nil
-}
-
 // updates an existing voterPoll in Voter voterID's VoteHistory
 func (vl *VoterList) UpdatePollData(voterID, pollID string, newVoter Voter) error {
 
@@ -366,21 +338,4 @@ func (vl *VoterList) UpdatePollData(voterID, pollID string, newVoter Voter) erro
 	}
 
 	return errors.New(fmt.Sprintf("Poll with ID %v does not exist in Voter %v's VoteHistory", newPoll.PollID, voterID))
-}
-
-// Extra Functions
-
-// PrintItem accepts a Voter and prints it to the console
-// in a JSON pretty format.
-func (vl *VoterList) PrintVoter(voter Voter) {
-	jsonBytes, _ := json.MarshalIndent(voter, "", "  ")
-	fmt.Println(string(jsonBytes))
-}
-
-// PrintAllItems accepts a slice of Voter and prints them to the console
-// in a JSON pretty format.
-func (vl *VoterList) PrintAllItems(voters []Voter) {
-	for _, voter := range voters {
-		vl.PrintVoter(voter)
-	}
 }
